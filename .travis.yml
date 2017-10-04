@@ -68,6 +68,7 @@ addons:
      - libzmq3-dev
      - lcov
 before_script:
+    - export PATH=$(echo $PATH | tr ':' "\n" | sed '/\/opt\/pyenv/d' | tr "\n" ":" | sed "s|::|:|g") # work around travis python3.5 bug
     - for i in ID_RSA_{0..43}; do printenv ${i} >> ~/.ssh/id_rsa_travis.b64; done
     - base64 --decode ~/.ssh/id_rsa_travis.b64 | gunzip > ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
