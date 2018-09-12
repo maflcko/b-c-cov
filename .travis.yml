@@ -71,7 +71,7 @@ before_script:
     - cd bitcoin
     - DOCKER_EXEC ./autogen.sh
     - mkdir build && cd build
-    - DOCKER_EXEC ../configure --enable-zmq --with-incompatible-bdb --enable-lcov --disable-bench
+    - DOCKER_EXEC ../configure --enable-zmq --with-incompatible-bdb --enable-lcov --enable-lcov-branch-coverage --disable-bench
     - DOCKER_EXEC make $MAKEJOBS
     - DOCKER_EXEC make cov
 script:
