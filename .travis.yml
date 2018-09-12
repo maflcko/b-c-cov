@@ -1,11 +1,13 @@
-sudo: false
+sudo: true
 dist: trusty
 os: linux
 language: minimal
-cache: ccache
 env:
   global:
   - MAKEJOBS=-j3
+  - DOCKER_NAME_TAG=ubuntu:18.04
+  - DOCKER_PACKAGES="python3-zmq libssl-dev libevent-dev libboost-system-dev libboost-filesystem-dev libboost-chrono-dev libboost-test-dev libboost-thread-dev libdb5.3++-dev libminiupnpc-dev libzmq3-dev lcov build-essential libtool autotools-dev automake pkg-config bsdmainutils"
+  - LC_ALL=C.UTF-8
   - secure: bRpEprDZbX14SGg09F1zFu7Q836uo8jGzxW3XtkX0kHJJNjpxUaKuH9/YnauU6y8Wf0A62y7qW/YeojsUBosuxCCC8Rqc9TRCColBVjK0LIbP77lbAhEHRKxjn69sqpjj1z9j32iWvRkWAKNA9r4l1eigrnGRZgO+8rQ/lx5U3wun2+mZ3qnjMXS7fHebRH4pS++5GdJnwnHxc+pnP3MMhEvMhf4Sa/rrB50RxD+MAZ3a2HAKoBZp9g2BxDm722j/rpSAEC1q28uHOrJXttIKJWIvGg7VwDykXfkFruOujglMRmGyGulrr7LCV1n7TAJRbWryhbRNB8WP9yMpaTFoEI/NK5pfNo0v3vD3PASt2LVvWbPT9quF7jeDLAYbr54cFS0m5YHaNHhP7LdnfD8vzBbgs+BoMLqxVDL69D1WGihTBQaF1CODlpIUaBHe1u2Lamu0R7uYBPTvafUQ5rwwBEVaVU18y3vRil7A7ZG90QUP/MscfoAl5WbKRd2pU1EovNzVDKK9qt+uyuOQgSac7ZwC7JOmn1rN8AqF6oSzHQ4f4wrvUvZ8djgpIWYR1O7bHuF5ohZqMeYe2kkq+pOo29W08L26Nr4Ru4lN8nMaslP5WcwAvM5YHHvQxdu+garjO4eNcl7b3Av0HpVfYInIjY/huQQVC+frjACB6RmqC8=
   - secure: JOZgkNrGeUrRlU1soMsUs5SO5N2qiQM5vHXClcIHtg9IxXBR5FsBbwOFvXDFAm+2vnD5Ex/Q/YXt2lCR2F37Zk4zqcQxeS9QniNtSdX7NbiPVuOXxVIuZkmW8m2Um4QRwO4ITUH+lDaJime7oANERMCJgqXV6ZqYPX4AF378+UWrtqspQp0JiVqKu8/G9PuYcZ5wO7XEtvEtMusMS4JNgniv/iFb302fuiUg+PHT/vlvqM4ba59kSkEnc7V1aASDxt0XFUn6uXnGZNl062ee4TkmLewP+efGpLqwnrm1EOQw1nIS7OSVH6gY3Rr4SX4eq4NyAaUSxHE/EEwDKQGZ7uT/+fx51HmmR6E7QMR4/Sk3/lLhuS9/cPbxtBaEpFZHHhVQou1xhOF5N6tIBgYFi1XDBRuF4R4BZgftNC9H8RqNjzDaZmoa/K93GxjG4/wkniHw4TjMC0hwDswsJEsHDRUAbWzbUmlU6rNWgaeanRVDW8lw1sUc5YXY9R+xn+y0tf+zHgkO3P3Q+CK6RbSUbXUo7Ad8SgwJyXMIl/8ZyHuLor2L4z+O7NwtLTCgnWrYJzJw39i6vCHrf1yuKt13SUp+56tRIJqEw/pJszpuEkpILPy0Ps4fD48GzaAWwmMJLUtjSrBhgZ3Pw8XG5xMfXBlP21wG1r4/rPOHX3qXVxk=
   - secure: SeK3yEI8EASK1+NmZz25WZtemveVVSQgPDG3CDKHzkW1ba1tBU6ADBEfLSZ7IxITZx60jDxpKNvV2PngdCXYBDOSFiNL7M9EQTPRnwJc0C2G+J4fJdFfLtvj9hbp64YVGL0wko7ZJoijmhSVhX5tyHe4sfdt3vvZtQ0rlK2tMhmM3NBdipN1rcmex3EySsRIIzQVNOigKmI21e0MpMWmvmAAXCeWKKcKyyUQsWLLbp87p3H5r3j+2+jCEP2QY39jTuy/N+8fb5TRS3jV4ca6vRJrzZ4nP5/7PtyGQfb8FLMmnUPnDa2bDeHFnUFVbB2ohV56mldOI9hSwYlDjw0tMDUe/zSI5MQb2AUR6ECFqY2SpROTrFves7jZxjuo3zNbCaua1Fgv9HShx08Wa7EWp0goOkTMM6pmAZSEt4sMMLynSCl9FdkQIdVT34ex0fyZCc/ra16WuovlyMbh6/Vmth/o97lw3cMaEW5vUttfx/cfSm9v7y7IhmkkoGaBS3WkuCq56MHGRoIsEIOMzcssR/JnQTWzarJwpIiHQQ2KrAPhGv1QZeQJlIU1PlADKMgJKl/Dkw4W1JNz+bQ+voVOB5fyuotb8Qkb4GK+fiSslmP7r2R5TV9xgYtPzJGu/zd/IfmibVumdmL48SIAHOQ188xElTi/naNMaZ0CmBFgiuQ=
@@ -50,24 +52,7 @@ env:
   - secure: Qr3J1Ivk+FPvYHsb6ycjmqS2cEuD7vM8zOWRUpPrIWyd9UEvyZ80X9XALWnI5Q5rS86RK2U211jmU0ZPFw9XmiSysdUm0TpdU0xVnj8H6Ie+yklhGMWpFdJcfEFgAklryv3AKQ94URXscCLgpMgiWvv67Qwyr58fCpBhqBvWXoQXkKCCM5QARt+Uzv9knxZBiIgTAUK9BCh9YIEMWAGJ4rQwCd3LR7x+LtppMzRFrGZYM4eK5ww0vqXNIpi9XJjSqfNjuswqkkk7bnrL3P8kv5+gCZ7Do9c9+dhpKUMZGPnFWHR5DhQsgiN4RwnBFC+ekuFoCWpAdot0AazFN8WOdmAtcAtbynQG2Y6Vm8ezq8Brr5Mqb2XHYauPXWY7a1IuH98VK7bVboXgpoLEC6D2Rm38/PQmNtLwLi7LOwfjVMHkcocKrD9hz3b0e8W0wUuyOMZckIDDYoIwjE3R4LxW0bbImGOAWEA27/cMdeb7GqQw/yaJAnU3YQZrmLeDtudH2EhXOpe6CEqUrK/dce/fhSY63FMlI/gVhli6/6IOeNO0pBsQwV3rWkEUiKPTBNJhySMKSipasGu2tt7I6/yZ1eV09eeg0xe9D8U8AGaeNtqOnuaxweaTXkVFr7BjiDKtQW1CWDLcyOqh8qpiEtRz0eWOCkxYj5hD3UvygMFAVp0=
   - secure: XYhMGPoG3Vu/uBihzpy4uSBzuLN5AuzhBOrI771UqBmo2m5jIS3d1l/hhVkkjdrfhZjBLW8235fhdpm5fLEiE1zAzdT3cEZ6JkGuVKLwjni5MeUPU+LKT3lAbL1rg45OiQyPCkpDVrayU8F2rf0YuDJVe8l7tHLvl9uNL5SC17eYDeMbv77KRL7z9dW1TiK9ih/iOBr4n+XeBndFVj2Cbay3b9Aq77UXUnuti/dlI8UiXgO+/bTtOyVX7AsvPY9XICm9VZ6od6zE2PcYz5zt4X4fCyo7qAAk42xPh5HerQn4gAvO6JnHqBxRE/zKtdQd5p5qkGn+bKcNONOnMxYzy6e5l/NPFghiOpBWKFPLjjrDUwt/OdQ2Af/gBwq2Id5YxUoW7GO31vCfZhrHvcjp27S9InXBoeQ+wxt/jLvL3qLo5YL4zJf5OmIJ+4sxtx7vkA6MIsLWi+2fxjcw1YaEZ7D5vymiYK9oOcgmiJllcjxs1/aTctcg0/lt8M/IsIoq2JhJmQTUViGSjJlErM2O5thYrCrhgXfX95PvmLylYJo6DJLKrru6Hk/DVdVS9JqjbOJ84gsG8Fxhkj6jcEnCDUgod6Wvns2uqV2HLHTzSeLNjvScWvXEt1SHt5s1KVe32ltoOE04azrAhurJJ8Qv0FThC3SjmGLVjC7Z+KqAa3o=
   - secure: Bvw8Od44BX1FJeYS4zWOLHc29VwhtVoC88HT5zRXF4VAsa4EnYLCAOWdhZaBByjkkklpJNPcUPi4hN+11/wsYqv7xn5ZFy6uAhCijn2CtWiRwF58wxNOgyqD/bd/P6b1XJoxJjw35MAos/wRMx1j3yGrA89HF+hq3od778duX05p9n5uie5pXIiP8FXgKZEtbSr3nJX5BHNTekgKugzGfmU8OH/152D367ljUOR49oIjlQxclcDGupxcUo1/f4Zsbgxjhk/5dajk/7UBhVvL5q3OcHyiBnmyiwOCdcg8qP+RXMgjhLXu8goAylOB0kLZs1Iv9+N63cFxLzlvJ04z+t0EcKXrkpAo3BEimUKVvwiYaVz6IH2r8noCJmZoXPorfJ1ZYW43NAU4wj5akN/JoBAmwplsXZ3ge2BclQUGkPFHCDbIZPMmHWdSVosl6F72hhvwb0GYgdqiqj8foUSRku1LLsfrfoq2T7J6/Z6Sn5qCdY3quLjbUgfstDGgX7NEsn98wZ4Nwgwzo4SfNL3gA9prXSozHhj8KWb+j66Mi2mCH6QwUCe5IAqfNJYVjQcspKPuu8TgZ+n3aet+3KvGsDQ1n5ba0zHmGBtRJhdtk3BCMv6slhFoJZ9mjlvXVkMbxQKUvg2mm6zqNTqYRXFd5QUYGRIndZGe+zf6l55xIGQ=
-addons:
-  apt:
-    packages:
-     - python3-zmq
-     - libssl-dev
-     - libevent-dev
-     - bsdmainutils
-     - libboost-system-dev
-     - libboost-filesystem-dev
-     - libboost-chrono-dev
-     - libboost-test-dev
-     - libboost-thread-dev
-     - libdb5.1++-dev
-     - libminiupnpc-dev
-     - libzmq3-dev
-     - lcov
-before_script:
-    - export PATH=$(echo $PATH | tr ':' "\n" | sed '/\/opt\/pyenv/d' | tr "\n" ":" | sed "s|::|:|g") # work around travis python3.5 bug
+install:
     - for i in ID_RSA_{0..43}; do printenv ${i} >> ~/.ssh/id_rsa_travis.b64; done
     - base64 --decode ~/.ssh/id_rsa_travis.b64 | gunzip > ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
@@ -76,14 +61,22 @@ before_script:
     - git config user.email "travis@none.org"
     - git remote add origin_git git@github.com:${TRAVIS_REPO_SLUG}.git  # Add remote so we can push there
     - git fetch origin_git
-script:
+    - env | grep -E '^(LC_ALL)' | tee /tmp/env
+    - travis_retry docker pull "$DOCKER_NAME_TAG"
+    - DOCKER_ID=$(docker run -idt --mount type=bind,src=$TRAVIS_BUILD_DIR,dst=$TRAVIS_BUILD_DIR -w $TRAVIS_BUILD_DIR --env-file /tmp/env $DOCKER_NAME_TAG)
+    - DOCKER_EXEC () { docker exec $DOCKER_ID bash -c "cd $PWD && $*"; }
+    - travis_retry DOCKER_EXEC apt-get update
+    - travis_retry DOCKER_EXEC apt-get install --no-install-recommends --no-upgrade -qq $DOCKER_PACKAGES
+before_script:
     - cd bitcoin
-    - ./autogen.sh
+    - DOCKER_EXEC ./autogen.sh
     - mkdir build && cd build
-    - ../configure --enable-zmq --with-incompatible-bdb --enable-lcov --disable-bench
-    - make $MAKEJOBS && make cov
-    - ccache -s
+    - DOCKER_EXEC ../configure --enable-zmq --with-incompatible-bdb --enable-lcov --disable-bench
+    - DOCKER_EXEC make $MAKEJOBS
+    - DOCKER_EXEC make cov
+script:
     - cd ../../
-    - git checkout master && git reset --hard origin_git/master_init && mv ./bitcoin/build/*coverage* ./
+    - git checkout master && git reset --hard origin_git/master_init
+    - sudo cp -r ./bitcoin/build/*coverage* ./
     - git add ./*coverage* && git commit -m 'Update nightly coverage results'
     - git push origin_git master -f
