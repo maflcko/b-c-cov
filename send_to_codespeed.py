@@ -54,7 +54,7 @@ def send_to_codespeed(*, bench_name, result, commit_id, executable='make', branc
 
 def main():
     parser = argparse.ArgumentParser(description="Read the given coverage info file and send it to codespeed", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument("--codespeed_url", default='https://bitcoinperf.com', help="The codespeed auth url")
+    parser.add_argument("--codespeed_url", default='https://codespeed.bitcoinperf.com', help="The codespeed auth url")
     parser.add_argument("--codespeed_user", default='marco', help="The codespeed auth user")
     parser.add_argument("--codespeed_pass", default='pass?', help="The codespeed auth pass")
     parser.add_argument("--codespeed_env", default='drahtbot-coverage', help="The codespeed env name")
