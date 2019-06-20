@@ -1,11 +1,8 @@
-sudo: true
-dist: trusty
-os: linux
 language: minimal
 env:
   global:
   - MAKEJOBS=-j3
-  - DOCKER_NAME_TAG=ubuntu:18.04
+  - DOCKER_NAME_TAG=debian:bullseye-slim  # Use debian 11 for lcov 1.14
   - DOCKER_PACKAGES="python3-zmq libssl-dev libevent-dev libboost-system-dev libboost-filesystem-dev libboost-chrono-dev libboost-test-dev libboost-thread-dev libdb5.3++-dev libminiupnpc-dev libzmq3-dev lcov build-essential libtool autotools-dev automake pkg-config bsdmainutils"
   - LC_ALL=C.UTF-8
   - secure: bRpEprDZbX14SGg09F1zFu7Q836uo8jGzxW3XtkX0kHJJNjpxUaKuH9/YnauU6y8Wf0A62y7qW/YeojsUBosuxCCC8Rqc9TRCColBVjK0LIbP77lbAhEHRKxjn69sqpjj1z9j32iWvRkWAKNA9r4l1eigrnGRZgO+8rQ/lx5U3wun2+mZ3qnjMXS7fHebRH4pS++5GdJnwnHxc+pnP3MMhEvMhf4Sa/rrB50RxD+MAZ3a2HAKoBZp9g2BxDm722j/rpSAEC1q28uHOrJXttIKJWIvGg7VwDykXfkFruOujglMRmGyGulrr7LCV1n7TAJRbWryhbRNB8WP9yMpaTFoEI/NK5pfNo0v3vD3PASt2LVvWbPT9quF7jeDLAYbr54cFS0m5YHaNHhP7LdnfD8vzBbgs+BoMLqxVDL69D1WGihTBQaF1CODlpIUaBHe1u2Lamu0R7uYBPTvafUQ5rwwBEVaVU18y3vRil7A7ZG90QUP/MscfoAl5WbKRd2pU1EovNzVDKK9qt+uyuOQgSac7ZwC7JOmn1rN8AqF6oSzHQ4f4wrvUvZ8djgpIWYR1O7bHuF5ohZqMeYe2kkq+pOo29W08L26Nr4Ru4lN8nMaslP5WcwAvM5YHHvQxdu+garjO4eNcl7b3Av0HpVfYInIjY/huQQVC+frjACB6RmqC8=
