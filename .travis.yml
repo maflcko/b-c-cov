@@ -51,8 +51,8 @@ env:
   - secure: Bvw8Od44BX1FJeYS4zWOLHc29VwhtVoC88HT5zRXF4VAsa4EnYLCAOWdhZaBByjkkklpJNPcUPi4hN+11/wsYqv7xn5ZFy6uAhCijn2CtWiRwF58wxNOgyqD/bd/P6b1XJoxJjw35MAos/wRMx1j3yGrA89HF+hq3od778duX05p9n5uie5pXIiP8FXgKZEtbSr3nJX5BHNTekgKugzGfmU8OH/152D367ljUOR49oIjlQxclcDGupxcUo1/f4Zsbgxjhk/5dajk/7UBhVvL5q3OcHyiBnmyiwOCdcg8qP+RXMgjhLXu8goAylOB0kLZs1Iv9+N63cFxLzlvJ04z+t0EcKXrkpAo3BEimUKVvwiYaVz6IH2r8noCJmZoXPorfJ1ZYW43NAU4wj5akN/JoBAmwplsXZ3ge2BclQUGkPFHCDbIZPMmHWdSVosl6F72hhvwb0GYgdqiqj8foUSRku1LLsfrfoq2T7J6/Z6Sn5qCdY3quLjbUgfstDGgX7NEsn98wZ4Nwgwzo4SfNL3gA9prXSozHhj8KWb+j66Mi2mCH6QwUCe5IAqfNJYVjQcspKPuu8TgZ+n3aet+3KvGsDQ1n5ba0zHmGBtRJhdtk3BCMv6slhFoJZ9mjlvXVkMbxQKUvg2mm6zqNTqYRXFd5QUYGRIndZGe+zf6l55xIGQ=
   - secure: "Cbc7qf6X4Fl44Sd/m8tJC5gcsBx0wtLJrzQix7R/dPtXiyPhCmTWJrUqPDsiHCwuPoaunQxHmQcxdRmeoy4lRajvVKOvKUBLUhRXSrdJfqjfYH12g37M8TRxSQbAoD0ccf9DvCtR5jLRq+CJn2U5/0zh/Cd3K5bt5fTFSMVFZc/9eyofYHDgqh3aP0L14BILN5uWkM6XmKtZIM41Mp1UNWVWy7PbbmjmedMELj198UsUqFx+PhH3ZJhupui8daJchzLGGHtTP5KgBfbI+4x9D4iFHFYLGxZffb18JEQUZtcGsNd4axUJ2goxdhWsWirvszK9YrJPyQxKeSgg8pqwtsCwTBiNc+HSZG4yQWR7YBL5YYb4v+zqDMmH7VD0YtBXZqIG1aB9UVgds8OGHxmJeC5J6fUfaydHAZxxvfVMiWvLCNsB84xN2fDZnXvBxzBu/gZWP1Boi09LxitkITaSVhfQzJmZihjxsYtXFS8FlNHalvuQa9vl2eat91gOcQnDl+6BKKoT6BEdfbd/KAmZ6/MXAoh8f38pWkJXgxOmCxZ5+swrZjWHrkGyvH2nsBkPgnk4bsvcj3zmVklxI6Dm08LsobX3Bi0P7qAzv0pinPINqniH1pvEKg5W7F2cLIm8d05V2c1MoZlRSy9rlY9HbuCFjccoy1A5DqbcEiDprpY="
 stages:
-  - fuzz_cov
   - lcov
+  - fuzz_cov
 before_install:
     - export PATH=$(echo $PATH | tr ':' "\n" | sed '/\/opt\/pyenv/d' | tr "\n" ":" | sed "s|::|:|g") # work around travis python3.5 bug
     - travis_retry sudo apt-get update
@@ -87,11 +87,11 @@ script:
     - git reset --hard origin_git/master_init
     - git cherry-pick $OTHER_COV_COMMIT
     - sudo chown -R $(id -u):$(id -g) ./bitcoin/build/
-    - cp -r ./bitcoin/build/*coverage* ./
+    - cp -r ./bitcoin/build/*coverage ./
     - git add ./*coverage* && git commit -m "lcov results for upstream@${MASTER_COMMIT}"
     - git push origin_git master -f
     - git checkout ${TRAVIS_BRANCH}
-    - cp -r ./bitcoin/build/*coverage* ./
+    - cp -r ./bitcoin/build/*coverage ./
     - ./send_to_codespeed.py --codespeed_pass ${BITCOINPERF_PASS} ./total.coverage/index.html ${MASTER_COMMIT}
     - ./send_to_codespeed.py --codespeed_pass ${BITCOINPERF_PASS} ./test_bitcoin.coverage/index.html ${MASTER_COMMIT}
 jobs:
@@ -113,6 +113,6 @@ jobs:
         - git reset --hard origin_git/master_init
         - git cherry-pick $OTHER_COV_COMMIT
         - sudo chown -R $(id -u):$(id -g) ./bitcoin/build/
-        - cp -r ./bitcoin/build/*coverage* ./
+        - cp -r ./bitcoin/build/*coverage ./
         - git add ./*coverage* && git commit -m "fuzz_cov results for upstream@${MASTER_COMMIT}"
         - git push origin_git master -f
