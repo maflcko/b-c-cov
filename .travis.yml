@@ -85,7 +85,7 @@ script:
     - git checkout master
     - export OTHER_COV_COMMIT=$(git log -1 --grep="fuzz_cov results" --format=%H)
     - git reset --hard origin_git/master_init
-    - git cherry-pick $OTHER_COV_COMMIT
+    - git cherry-pick $OTHER_COV_COMMIT --allow-empty
     - sudo chown -R $(id -u):$(id -g) ./bitcoin/build/
     - cp -r ./bitcoin/build/*coverage ./
     - git add ./*coverage* && git commit -m "lcov results for upstream@${MASTER_COMMIT}"
@@ -111,7 +111,7 @@ jobs:
         - git checkout master
         - export OTHER_COV_COMMIT=$(git log -1 --grep="lcov results" --format=%H)
         - git reset --hard origin_git/master_init
-        - git cherry-pick $OTHER_COV_COMMIT
+        - git cherry-pick $OTHER_COV_COMMIT --allow-empty
         - sudo chown -R $(id -u):$(id -g) ./bitcoin/build/
         - cp -r ./bitcoin/build/*coverage ./
         - git add ./*coverage* && git commit -m "fuzz_cov results for upstream@${MASTER_COMMIT}"
