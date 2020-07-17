@@ -67,7 +67,6 @@ before_install:
     - DOCKER_EXEC () { docker exec $DOCKER_ID bash -c "cd $PWD && $*"; }
     - travis_retry DOCKER_EXEC apt-get update
     - travis_retry DOCKER_EXEC apt-get install --no-install-recommends --no-upgrade -qq $DOCKER_PACKAGES
-    - DOCKER_EXEC mv ./llvm-cov_gcov /bin/
     - cd bitcoin
     - export MASTER_COMMIT=$(git log --format='%H' -1)
 before_script:
@@ -94,6 +93,7 @@ jobs:
     - stage: fuzz_cov
       install:
         - git fetch https://github.com/MarcoFalke/bitcoin-core/ 1912-fuzzCov && git merge FETCH_HEAD
+        - DOCKER_EXEC mv ./llvm-cov_gcov /bin/
       script:
         - git clone https://github.com/bitcoin-core/qa-assets
         - DOCKER_EXEC ../configure --enable-fuzz --enable-c++17 --with-sanitizers=fuzzer --enable-lcov --enable-lcov-branch-coverage CC=clang CXX=clang++
