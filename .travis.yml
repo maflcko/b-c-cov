@@ -96,7 +96,7 @@ jobs:
         - DOCKER_EXEC mv ./llvm-cov_gcov /bin/
       script:
         - git clone https://github.com/bitcoin-core/qa-assets
-        - DOCKER_EXEC ../configure --enable-fuzz --enable-c++17 --with-sanitizers=fuzzer --enable-lcov --enable-lcov-branch-coverage CC=clang CXX=clang++
+        - DOCKER_EXEC ../configure --enable-fuzz --with-sanitizers=fuzzer --enable-lcov --enable-lcov-branch-coverage CC=clang CXX=clang++
         - DOCKER_EXEC make $MAKEJOBS
         - DOCKER_EXEC make cov_fuzz
         - cd ../../
