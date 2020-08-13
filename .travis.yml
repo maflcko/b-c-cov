@@ -91,9 +91,6 @@ jobs:
     - stage: lcov
 
     - stage: fuzz_cov
-      install:
-        - git fetch https://github.com/MarcoFalke/bitcoin-core/ 1912-fuzzCov && git merge FETCH_HEAD
-        - DOCKER_EXEC mv ../llvm-cov_gcov /bin/
       script:
         - git clone https://github.com/bitcoin-core/qa-assets
         - DOCKER_EXEC ../configure --enable-fuzz --with-sanitizers=fuzzer --enable-lcov --enable-lcov-branch-coverage CC=clang CXX=clang++
