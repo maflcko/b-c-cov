@@ -76,16 +76,6 @@ before_script:
 script:
     - DOCKER_EXEC ../configure --enable-zmq --with-incompatible-bdb --enable-lcov --enable-lcov-branch-coverage --disable-bench
     - DOCKER_EXEC make $MAKEJOBS
-    - DOCKER_EXEC make cov
-    - cd ../../
-    - git checkout master
-    - export OTHER_COV_COMMIT=$(git log -1 --grep="fuzz_cov results" --format=%H)
-    - git reset --hard origin_git/master_init
-    - git cherry-pick $OTHER_COV_COMMIT --allow-empty
-    - sudo chown -R $(id -u):$(id -g) ./bitcoin/build/
-    - cp -r ./bitcoin/build/*coverage ./
-    - git add ./*coverage* && git commit -m "lcov results for upstream@${MASTER_COMMIT}"
-    - git push origin_git master -f
 jobs:
   include:
 
