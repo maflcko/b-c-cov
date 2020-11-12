@@ -71,10 +71,11 @@ before_install:
     - cd bitcoin
     - export MASTER_COMMIT=$(git log --format='%H' -1)
 before_script:
+    - sed -i 's|functional/test_runner.py |functional/test_runner.py --timeout-factor=10 |g' ./Makefile.am
     - DOCKER_EXEC ./autogen.sh
     - mkdir build && cd build
 script:
-    - DOCKER_EXEC ../configure --enable-zmq --with-incompatible-bdb --enable-lcov --enable-lcov-branch-coverage --disable-bench
+    - DOCKER_EXEC ../configure --enable-zmq --with-incompatible-bdb --enable-lcov --enable-lcov-branch-coverage --disable-bench --enable-extended-functional-tests
     - DOCKER_EXEC make $MAKEJOBS
     - DOCKER_EXEC make cov
     - cd ../../
