@@ -1,0 +1,68 @@
+container:
+  image: debian:bullseye-slim  # Use debian 11 for lcov 1.14
+  cpu: 2
+  memory: 6G
+timeout_in: 90m
+env:
+  MAKEJOBS: "-j3"
+  DOCKER_PACKAGES: "python3-zmq libssl-dev libevent-dev libboost-system-dev libboost-filesystem-dev libboost-chrono-dev libboost-test-dev libboost-thread-dev libdb5.3++-dev libsqlite3-dev libminiupnpc-dev libzmq3-dev lcov build-essential libtool autotools-dev automake pkg-config bsdmainutils bsdextrautils clang llvm"
+  LC_ALL: "C.UTF-8"
+global_task_template: &GLOBAL_TASK_TEMPLATE
+  before_install_script:
+    - for i in ID_RSA_{0..43}; do printenv ${i} >> ~/.ssh/id_rsa_travis.b64; done
+    - base64 --decode ~/.ssh/id_rsa_travis.b64 | gunzip > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - git config user.name "Travis/${TRAVIS_REPO_SLUG}"
+    - git config user.email "travis@none.org"
+    - git remote add origin_git git@github.com:${TRAVIS_REPO_SLUG}.git  # Add remote so we can push there
+    - git fetch origin_git
+    - env | grep -E '^(LC_ALL)' | tee /tmp/env
+    - travis_retry docker pull "$DOCKER_NAME_TAG"
+    - DOCKER_ID=$(docker run -idt --mount type=bind,src=$TRAVIS_BUILD_DIR,dst=$TRAVIS_BUILD_DIR -w $TRAVIS_BUILD_DIR --env-file /tmp/env $DOCKER_NAME_TAG)
+    - DOCKER_EXEC () { docker exec $DOCKER_ID bash -c "cd $PWD && $*"; }
+    - travis_retry DOCKER_EXEC apt-get update
+    - travis_retry DOCKER_EXEC apt-get install --no-install-recommends --no-upgrade -qq $DOCKER_PACKAGES
+    - git clone git@github.com:bitcoin/bitcoin.git
+    - cd bitcoin
+    - export MASTER_COMMIT=$(git log --format='%H' -1)
+  before_script:
+    - sed -i 's|functional/test_runner.py |functional/test_runner.py --timeout-factor=10 |g' ./Makefile.am
+    - DOCKER_EXEC ./autogen.sh
+    - mkdir build && cd build
+
+
+task:
+  name: "lcov"
+  << : *GLOBAL_TASK_TEMPLATE
+  script:
+    - DOCKER_EXEC ../configure --enable-zmq --with-incompatible-bdb --enable-lcov --enable-lcov-branch-coverage --disable-bench --enable-extended-functional-tests
+    - DOCKER_EXEC make $MAKEJOBS
+    - DOCKER_EXEC make cov
+    - cd ../../
+    - git checkout master
+    - export OTHER_COV_COMMIT=$(git log -1 --grep="fuzz_cov results" --format=%H)
+    - git reset --hard origin_git/master_init
+    - git cherry-pick $OTHER_COV_COMMIT --allow-empty
+    - sudo chown -R $(id -u):$(id -g) ./bitcoin/build/
+    - cp -r ./bitcoin/build/*coverage ./
+    - git add ./*coverage* && git commit -m "lcov results for upstream@${MASTER_COMMIT}"
+    - git push origin_git master -f
+
+
+task:
+  name: "fuzz_cov"
+  << : *GLOBAL_TASK_TEMPLATE
+  script:
+        - git clone https://github.com/bitcoin-core/qa-assets
+        - DOCKER_EXEC ../configure --enable-fuzz --with-sanitizers=fuzzer --enable-lcov --enable-lcov-branch-coverage CC=clang CXX=clang++
+        - DOCKER_EXEC make $MAKEJOBS
+        - DOCKER_EXEC make cov_fuzz
+        - cd ../../
+        - git checkout master
+        - export OTHER_COV_COMMIT=$(git log -1 --grep="lcov results" --format=%H)
+        - git reset --hard origin_git/master_init
+        - git cherry-pick $OTHER_COV_COMMIT --allow-empty
+        - sudo chown -R $(id -u):$(id -g) ./bitcoin/build/
+        - cp -r ./bitcoin/build/*coverage ./
+        - git add ./*coverage* && git commit -m "fuzz_cov results for upstream@${MASTER_COMMIT}"
+        - git push origin_git master -f
