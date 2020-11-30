@@ -35,13 +35,12 @@ global_task_template: &GLOBAL_TASK_TEMPLATE
 task:
   name: "lcov"
   << : *GLOBAL_TASK_TEMPLATE
-  use_compute_credits: true
-  script:
+  build_script:
     - cd bitcoin/build
     - ../configure --enable-zmq --with-incompatible-bdb --enable-lcov --enable-lcov-branch-coverage --disable-bench --enable-extended-functional-tests
     - make $MAKEJOBS
     - make cov
-    - cd ../../
+  upload_script:
     - git checkout master
     - export OTHER_COV_COMMIT=$(git log -1 --grep="fuzz_cov results" --format=%H)
     - git reset --hard origin_git/master_init
@@ -57,14 +56,13 @@ task:
 task:
   name: "fuzz_cov"
   << : *GLOBAL_TASK_TEMPLATE
-  use_compute_credits: true
-  script:
+  build_script:
     - cd bitcoin/build
     - git clone https://github.com/bitcoin-core/qa-assets
     - ../configure --enable-fuzz --with-sanitizers=fuzzer --enable-lcov --enable-lcov-branch-coverage CC=clang CXX=clang++
     - make $MAKEJOBS
     - make cov_fuzz
-    - cd ../../
+  upload_script:
     - git checkout master
     - export OTHER_COV_COMMIT=$(git log -1 --grep="lcov results" --format=%H)
     - git reset --hard origin_git/master_init
