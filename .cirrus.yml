@@ -9,7 +9,8 @@ env:
   LC_ALL: "C.UTF-8"
   ID_SSH: "ENCRYPTED[9d3aa76775f8b2c0018725ae77ecb6d8951fbb74e29bd5172aad53393fbe5ba962944ba2dba65b13c514e21139e74548]"
 global_task_template: &GLOBAL_TASK_TEMPLATE
-  before_install_script:
+  prepare_script:
+    - apt update && apt install -y git
     - echo "$ID_SSH" > ~/.ssh/id_ssh
     - chmod 600 ~/.ssh/id_ssh
     - git config user.name "CI/${TRAVIS_REPO_SLUG}"
