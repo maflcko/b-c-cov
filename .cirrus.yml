@@ -7,12 +7,12 @@ env:
   MAKEJOBS: "-j3"
   DOCKER_PACKAGES: "python3-zmq libssl-dev libevent-dev libboost-system-dev libboost-filesystem-dev libboost-chrono-dev libboost-test-dev libboost-thread-dev libdb5.3++-dev libsqlite3-dev libminiupnpc-dev libzmq3-dev lcov build-essential libtool autotools-dev automake pkg-config bsdmainutils bsdextrautils clang llvm"
   LC_ALL: "C.UTF-8"
+  ID_SSH: "ENCRYPTED[9d3aa76775f8b2c0018725ae77ecb6d8951fbb74e29bd5172aad53393fbe5ba962944ba2dba65b13c514e21139e74548]"
 global_task_template: &GLOBAL_TASK_TEMPLATE
   before_install_script:
-    - for i in ID_RSA_{0..43}; do printenv ${i} >> ~/.ssh/id_rsa_travis.b64; done
-    - base64 --decode ~/.ssh/id_rsa_travis.b64 | gunzip > ~/.ssh/id_rsa
-    - chmod 600 ~/.ssh/id_rsa
-    - git config user.name "Travis/${TRAVIS_REPO_SLUG}"
+    - echo "$ID_SSH" > ~/.ssh/id_ssh
+    - chmod 600 ~/.ssh/id_ssh
+    - git config user.name "CI/${TRAVIS_REPO_SLUG}"
     - git config user.email "travis@none.org"
     - git remote add origin_git git@github.com:${TRAVIS_REPO_SLUG}.git  # Add remote so we can push there
     - git fetch origin_git
