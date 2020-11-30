@@ -15,22 +15,18 @@ global_task_template: &GLOBAL_TASK_TEMPLATE
     - mkdir -p ~/.ssh
     - echo "$ID_SSH" > ~/.ssh/id_ssh
     - chmod 600 ~/.ssh/id_ssh
-    - git config user.name "CI/${TRAVIS_REPO_SLUG}"
-    - git config user.email "travis@none.org"
-    - git remote add origin_git git@github.com:${TRAVIS_REPO_SLUG}.git  # Add remote so we can push there
+    - git config user.name "CI/${CIRRUS_REPO_FULL_NAME}"
+    - git config user.email "ci@none.org"
+    - git remote add origin_git git@github.com:${CIRRUS_REPO_FULL_NAME}.git  # Add remote so we can push there
     - git fetch origin_git
-    - env | grep -E '^(LC_ALL)' | tee /tmp/env
-    - travis_retry docker pull "$DOCKER_NAME_TAG"
-    - DOCKER_ID=$(docker run -idt --mount type=bind,src=$TRAVIS_BUILD_DIR,dst=$TRAVIS_BUILD_DIR -w $TRAVIS_BUILD_DIR --env-file /tmp/env $DOCKER_NAME_TAG)
-    - DOCKER_EXEC () { docker exec $DOCKER_ID bash -c "cd $PWD && $*"; }
-    - travis_retry DOCKER_EXEC apt-get update
-    - travis_retry DOCKER_EXEC apt-get install --no-install-recommends --no-upgrade -qq $DOCKER_PACKAGES
+  install_2_script:
+    - apt-get install --no-install-recommends --no-upgrade -qq $DOCKER_PACKAGES
     - git clone git@github.com:bitcoin/bitcoin.git
     - cd bitcoin
     - export MASTER_COMMIT=$(git log --format='%H' -1)
   before_script:
     - sed -i 's|functional/test_runner.py |functional/test_runner.py --timeout-factor=10 |g' ./Makefile.am
-    - DOCKER_EXEC ./autogen.sh
+    - ./autogen.sh
     - mkdir build && cd build
 
 
@@ -39,9 +35,9 @@ task:
   << : *GLOBAL_TASK_TEMPLATE
   use_compute_credits: true
   script:
-    - DOCKER_EXEC ../configure --enable-zmq --with-incompatible-bdb --enable-lcov --enable-lcov-branch-coverage --disable-bench --enable-extended-functional-tests
-    - DOCKER_EXEC make $MAKEJOBS
-    - DOCKER_EXEC make cov
+    - ../configure --enable-zmq --with-incompatible-bdb --enable-lcov --enable-lcov-branch-coverage --disable-bench --enable-extended-functional-tests
+    - make $MAKEJOBS
+    - make cov
     - cd ../../
     - git checkout master
     - export OTHER_COV_COMMIT=$(git log -1 --grep="fuzz_cov results" --format=%H)
@@ -58,9 +54,9 @@ task:
   << : *GLOBAL_TASK_TEMPLATE
   script:
         - git clone https://github.com/bitcoin-core/qa-assets
-        - DOCKER_EXEC ../configure --enable-fuzz --with-sanitizers=fuzzer --enable-lcov --enable-lcov-branch-coverage CC=clang CXX=clang++
-        - DOCKER_EXEC make $MAKEJOBS
-        - DOCKER_EXEC make cov_fuzz
+        - ../configure --enable-fuzz --with-sanitizers=fuzzer --enable-lcov --enable-lcov-branch-coverage CC=clang CXX=clang++
+        - make $MAKEJOBS
+        - make cov_fuzz
         - cd ../../
         - git checkout master
         - export OTHER_COV_COMMIT=$(git log -1 --grep="lcov results" --format=%H)
