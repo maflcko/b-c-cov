@@ -37,6 +37,7 @@ global_task_template: &GLOBAL_TASK_TEMPLATE
 task:
   name: "lcov"
   << : *GLOBAL_TASK_TEMPLATE
+  use_compute_credits: true
   script:
     - DOCKER_EXEC ../configure --enable-zmq --with-incompatible-bdb --enable-lcov --enable-lcov-branch-coverage --disable-bench --enable-extended-functional-tests
     - DOCKER_EXEC make $MAKEJOBS
