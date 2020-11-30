@@ -11,31 +11,33 @@ env:
 global_task_template: &GLOBAL_TASK_TEMPLATE
   install_packages_script:
     - apt update && apt install -y git
+    - apt-get install --no-install-recommends --no-upgrade -qq $DOCKER_PACKAGES
   prepare_script:
     - mkdir -p ~/.ssh
     - ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
     - echo "$ID_SSH" > ~/.ssh/id_ssh
     - chmod 600 ~/.ssh/id_ssh
+    - eval `ssh-agent -s`
+    - ssh-add ~/.ssh/id_ssh
     - git config user.name "CI/${CIRRUS_REPO_FULL_NAME}"
     - git config user.email "ci@none.org"
     - git remote add origin_git git@github.com:${CIRRUS_REPO_FULL_NAME}.git  # Add remote so we can push there
     - git fetch origin_git
-  install_2_script:
-    - apt-get install --no-install-recommends --no-upgrade -qq $DOCKER_PACKAGES
     - git clone git@github.com:bitcoin/bitcoin.git
     - cd bitcoin
     - export MASTER_COMMIT=$(git log --format='%H' -1)
   before_script:
+    - cd bitcoin
     - sed -i 's|functional/test_runner.py |functional/test_runner.py --timeout-factor=10 |g' ./Makefile.am
     - ./autogen.sh
     - mkdir build && cd build
-
 
 task:
   name: "lcov"
   << : *GLOBAL_TASK_TEMPLATE
   use_compute_credits: true
   script:
+    - cd bitcoin/build
     - ../configure --enable-zmq --with-incompatible-bdb --enable-lcov --enable-lcov-branch-coverage --disable-bench --enable-extended-functional-tests
     - make $MAKEJOBS
     - make cov
@@ -47,23 +49,29 @@ task:
     - sudo chown -R $(id -u):$(id -g) ./bitcoin/build/
     - cp -r ./bitcoin/build/*coverage ./
     - git add ./*coverage* && git commit -m "lcov results for upstream@${MASTER_COMMIT}"
+    - eval `ssh-agent -s`
+    - ssh-add ~/.ssh/id_ssh
     - git push origin_git master -f
 
 
 task:
   name: "fuzz_cov"
   << : *GLOBAL_TASK_TEMPLATE
+  use_compute_credits: true
   script:
-        - git clone https://github.com/bitcoin-core/qa-assets
-        - ../configure --enable-fuzz --with-sanitizers=fuzzer --enable-lcov --enable-lcov-branch-coverage CC=clang CXX=clang++
-        - make $MAKEJOBS
-        - make cov_fuzz
-        - cd ../../
-        - git checkout master
-        - export OTHER_COV_COMMIT=$(git log -1 --grep="lcov results" --format=%H)
-        - git reset --hard origin_git/master_init
-        - git cherry-pick $OTHER_COV_COMMIT --allow-empty
-        - sudo chown -R $(id -u):$(id -g) ./bitcoin/build/
-        - cp -r ./bitcoin/build/*coverage ./
-        - git add ./*coverage* && git commit -m "fuzz_cov results for upstream@${MASTER_COMMIT}"
-        - git push origin_git master -f
+    - cd bitcoin/build
+    - git clone https://github.com/bitcoin-core/qa-assets
+    - ../configure --enable-fuzz --with-sanitizers=fuzzer --enable-lcov --enable-lcov-branch-coverage CC=clang CXX=clang++
+    - make $MAKEJOBS
+    - make cov_fuzz
+    - cd ../../
+    - git checkout master
+    - export OTHER_COV_COMMIT=$(git log -1 --grep="lcov results" --format=%H)
+    - git reset --hard origin_git/master_init
+    - git cherry-pick $OTHER_COV_COMMIT --allow-empty
+    - sudo chown -R $(id -u):$(id -g) ./bitcoin/build/
+    - cp -r ./bitcoin/build/*coverage ./
+    - git add ./*coverage* && git commit -m "fuzz_cov results for upstream@${MASTER_COMMIT}"
+    - eval `ssh-agent -s`
+    - ssh-add ~/.ssh/id_ssh
+    - git push origin_git master -f
