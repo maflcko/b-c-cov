@@ -13,6 +13,7 @@ global_task_template: &GLOBAL_TASK_TEMPLATE
     - apt update && apt install -y git
   prepare_script:
     - mkdir -p ~/.ssh
+    - ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
     - echo "$ID_SSH" > ~/.ssh/id_ssh
     - chmod 600 ~/.ssh/id_ssh
     - git config user.name "CI/${CIRRUS_REPO_FULL_NAME}"
