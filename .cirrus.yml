@@ -34,6 +34,8 @@ global_task_template: &GLOBAL_TASK_TEMPLATE
 
 task:
   name: "lcov"
+  depends_on:
+    - fuzz_cov
   << : *GLOBAL_TASK_TEMPLATE
   build_script:
     - cd bitcoin/build
