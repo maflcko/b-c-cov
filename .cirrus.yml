@@ -29,7 +29,7 @@ global_task_template: &GLOBAL_TASK_TEMPLATE
     - export MASTER_COMMIT=$(git log --format='%H' -1)
   before_script:
     - cd bitcoin
-    - sed -i 's|functional/test_runner.py |functional/test_runner.py --timeout-factor=10 |g' ./Makefile.am
+    - sed -i 's|functional/test_runner.py |functional/test_runner.py --timeout-factor=10 --exclude=rpc_deprecated |g' ./Makefile.am
     - ./autogen.sh
     - mkdir build && cd build
 
