@@ -2,7 +2,7 @@ container:
   image: debian:bullseye-slim  # Use debian 11 for lcov 1.14
   cpu: 2
   memory: 6G
-timeout_in: 90m
+timeout_in: 120m
 env:
   MAKEJOBS: "-j3"
   DOCKER_PACKAGES: "python3-zmq libssl-dev libevent-dev libboost-system-dev libboost-filesystem-dev libboost-chrono-dev libboost-test-dev libboost-thread-dev libdb5.3++-dev libsqlite3-dev libminiupnpc-dev libzmq3-dev lcov build-essential libtool autotools-dev automake pkg-config bsdmainutils bsdextrautils clang llvm"
