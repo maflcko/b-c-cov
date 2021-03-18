@@ -61,7 +61,7 @@ task:
   << : *GLOBAL_TASK_TEMPLATE
   build_script:
     - cd bitcoin/build
-    - git clone https://github.com/bitcoin-core/qa-assets
+    - git clone https://github.com/bitcoin-core/qa-assets --depth=1
     - ../configure --enable-fuzz --with-sanitizers=fuzzer --enable-lcov --enable-lcov-branch-coverage CC=clang CXX=clang++
     - make $MAKEJOBS
     - make cov_fuzz
