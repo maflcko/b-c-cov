@@ -2,11 +2,10 @@ container:
   image: debian:bullseye-slim  # Use debian 11 for lcov 1.14
   cpu: 2
   memory: 6G
-  kvm: true
 timeout_in: 120m
 env:
   MAKEJOBS: "-j3"
-  DOCKER_PACKAGES: "python3-zmq libssl-dev libevent-dev libboost-system-dev libboost-filesystem-dev libboost-chrono-dev libboost-test-dev libboost-thread-dev libdb5.3++-dev libsqlite3-dev libminiupnpc-dev libzmq3-dev lcov build-essential libtool autotools-dev automake pkg-config bsdmainutils bsdextrautils clang llvm"
+  DOCKER_PACKAGES: "python3-zmq libevent-dev libboost-system-dev libboost-filesystem-dev libboost-test-dev libdb5.3++-dev libsqlite3-dev libminiupnpc-dev libzmq3-dev lcov build-essential libtool autotools-dev automake pkg-config bsdmainutils bsdextrautils clang llvm"
   LC_ALL: "C.UTF-8"
   ID_SSH: "ENCRYPTED[9d3aa76775f8b2c0018725ae77ecb6d8951fbb74e29bd5172aad53393fbe5ba962944ba2dba65b13c514e21139e74548]"
 global_task_template: &GLOBAL_TASK_TEMPLATE
@@ -24,12 +23,12 @@ global_task_template: &GLOBAL_TASK_TEMPLATE
     - git config user.email "ci@none.org"
     - git remote add origin_git git@github.com:${CIRRUS_REPO_FULL_NAME}.git  # Add remote so we can push there
     - git fetch origin_git
-    - git clone git@github.com:bitcoin/bitcoin.git
-    - cd bitcoin
+    - git clone --depth=1 https://github.com/bitcoin/bitcoin bitcoin-core
+    - cd bitcoin-core
     - export MASTER_COMMIT=$(git log --format='%H' -1)
   before_script:
-    - cd bitcoin
-    - sed -i 's|functional/test_runner.py |functional/test_runner.py --timeout-factor=10 --exclude=rpc_deprecated |g' ./Makefile.am
+    - cd bitcoin-core
+    - sed -i 's|functional/test_runner.py |functional/test_runner.py --timeout-factor=10 |g' ./Makefile.am
     - ./autogen.sh
     - mkdir build && cd build
 
@@ -39,40 +38,40 @@ task:
     - fuzz_cov
   << : *GLOBAL_TASK_TEMPLATE
   build_script:
-    - cd bitcoin/build
+    - cd bitcoin-core/build
     - ../configure --enable-zmq --with-incompatible-bdb --enable-lcov --enable-lcov-branch-coverage --disable-bench --enable-extended-functional-tests
     - make $MAKEJOBS
     - make cov
   upload_script:
-    - git checkout master
+    - git checkout site
     - export OTHER_COV_COMMIT=$(git log -1 --grep="fuzz_cov results" --format=%H)
-    - git reset --hard origin_git/master_init
+    - git reset --hard origin_git/site_init
     - git cherry-pick $OTHER_COV_COMMIT --allow-empty
-    - chown -R $(id -u):$(id -g) ./bitcoin/build/
-    - cp -r ./bitcoin/build/*coverage ./
+    - chown -R $(id -u):$(id -g) ./bitcoin-core/build/
+    - cp -r ./bitcoin-core/build/*coverage ./
     - git add ./*coverage* && git commit -m "lcov results for upstream@${MASTER_COMMIT}"
     - eval `ssh-agent -s`
     - ssh-add ~/.ssh/id_ssh
-    - git push origin_git master -f
+    - git push origin_git site -f
 
 
 task:
   name: "fuzz_cov"
   << : *GLOBAL_TASK_TEMPLATE
   build_script:
-    - cd bitcoin/build
+    - cd bitcoin-core/build
     - git clone https://github.com/bitcoin-core/qa-assets --depth=1
     - ../configure --enable-fuzz --with-sanitizers=fuzzer --enable-lcov --enable-lcov-branch-coverage CC=clang CXX=clang++
     - make $MAKEJOBS
     - make cov_fuzz
   upload_script:
-    - git checkout master
+    - git checkout site
     - export OTHER_COV_COMMIT=$(git log -1 --grep="lcov results" --format=%H)
-    - git reset --hard origin_git/master_init
+    - git reset --hard origin_git/site_init
     - git cherry-pick $OTHER_COV_COMMIT --allow-empty
-    - chown -R $(id -u):$(id -g) ./bitcoin/build/
-    - cp -r ./bitcoin/build/*coverage ./
+    - chown -R $(id -u):$(id -g) ./bitcoin-core/build/
+    - cp -r ./bitcoin-core/build/*coverage ./
     - git add ./*coverage* && git commit -m "fuzz_cov results for upstream@${MASTER_COMMIT}"
     - eval `ssh-agent -s`
     - ssh-add ~/.ssh/id_ssh
-    - git push origin_git master -f
+    - git push origin_git site -f
