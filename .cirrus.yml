@@ -7,7 +7,7 @@ timeout_in: 120m
 env:
   TEST_RUNNER_PORT_MIN: "14000"  # Must be larger than 12321, which is used for the http cache. See https://cirrus-ci.org/guide/writing-tasks/#http-cache
   MAKEJOBS: "-j6"
-  DOCKER_PACKAGES: "python3-zmq libevent-dev libboost-system-dev libboost-filesystem-dev libboost-test-dev libdb5.3++-dev libsqlite3-dev libminiupnpc-dev libzmq3-dev lcov build-essential libtool autotools-dev automake pkg-config bsdmainutils bsdextrautils clang llvm"
+  DOCKER_PACKAGES: "python3-zmq libevent-dev libboost-dev libdb5.3++-dev libsqlite3-dev libminiupnpc-dev libzmq3-dev lcov build-essential libtool autotools-dev automake pkg-config bsdmainutils bsdextrautils clang llvm"
   LC_ALL: "C.UTF-8"
   ID_SSH: "ENCRYPTED[9d3aa76775f8b2c0018725ae77ecb6d8951fbb74e29bd5172aad53393fbe5ba962944ba2dba65b13c514e21139e74548]"
 global_task_template: &GLOBAL_TASK_TEMPLATE
