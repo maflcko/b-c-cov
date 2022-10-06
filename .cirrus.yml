@@ -7,7 +7,7 @@ timeout_in: 120m
 env:
   TEST_RUNNER_PORT_MIN: "14000"  # Must be larger than 12321, which is used for the http cache. See https://cirrus-ci.org/guide/writing-tasks/#http-cache
   MAKEJOBS: "-j6"
-  DOCKER_PACKAGES: "python3-zmq libevent-dev libboost-dev libdb5.3++-dev libsqlite3-dev libminiupnpc-dev libzmq3-dev lcov build-essential libtool autotools-dev automake pkg-config bsdmainutils bsdextrautils clang llvm"
+  DOCKER_PACKAGES: "python3-zmq libevent-dev libboost-dev libdb5.3++-dev libsqlite3-dev libminiupnpc-dev libzmq3-dev lcov build-essential libtool autotools-dev automake pkg-config bsdmainutils bsdextrautils clang llvm curl"
   LC_ALL: "C.UTF-8"
   ID_SSH: "ENCRYPTED[9d3aa76775f8b2c0018725ae77ecb6d8951fbb74e29bd5172aad53393fbe5ba962944ba2dba65b13c514e21139e74548]"
 global_task_template: &GLOBAL_TASK_TEMPLATE
@@ -30,7 +30,7 @@ global_task_template: &GLOBAL_TASK_TEMPLATE
     - export MASTER_COMMIT=$(git log --format='%H' -1)
   before_script:
     - cd bitcoin-core
-    - sed -i 's|functional/test_runner.py |functional/test_runner.py --timeout-factor=10 --exclude=feature_dbcrash |g' ./Makefile.am
+    - sed -i 's|functional/test_runner.py |functional/test_runner.py --previous-releases --timeout-factor=10 --exclude=feature_dbcrash |g' ./Makefile.am
     - ./autogen.sh
     - mkdir build && cd build
 
@@ -40,8 +40,12 @@ task:
     - fuzz_cov
   << : *GLOBAL_TASK_TEMPLATE
   build_script:
-    - cd bitcoin-core/build
-    - ../configure --enable-zmq --with-incompatible-bdb --enable-lcov --enable-lcov-branch-coverage --disable-bench --enable-extended-functional-tests
+    - cd bitcoin-core
+    - ./test/get_previous_releases.py -b -t ./build/releases
+    - cd build
+    - ../contrib/install_db4.sh `pwd`
+    - export BDB_PREFIX='/tmp/cirrus-ci-build/bitcoin-core/build/db4'
+    - ../configure BDB_LIBS="-L${BDB_PREFIX}/lib -ldb_cxx-4.8" BDB_CFLAGS="-I${BDB_PREFIX}/include" --enable-zmq --enable-lcov --enable-lcov-branch-coverage --disable-bench --enable-extended-functional-tests
     - make $MAKEJOBS
     - make cov
   upload_script:
