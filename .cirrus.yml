@@ -1,5 +1,5 @@
 container:
-  image: ubuntu:rolling
+  image: ubuntu:devel
   cpu: 2
   memory: 8G
   greedy: true
