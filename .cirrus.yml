@@ -1,12 +1,6 @@
-container:
-  image: ubuntu:devel
-  cpu: 2
-  memory: 8G
-  greedy: true
 timeout_in: 120m
 env:
   TEST_RUNNER_PORT_MIN: "14000"  # Must be larger than 12321, which is used for the http cache. See https://cirrus-ci.org/guide/writing-tasks/#http-cache
-  MAKEJOBS: "-j6"
   LC_ALL: "C.UTF-8"
   ID_SSH: "ENCRYPTED[9d3aa76775f8b2c0018725ae77ecb6d8951fbb74e29bd5172aad53393fbe5ba962944ba2dba65b13c514e21139e74548]"
 global_task_template: &GLOBAL_TASK_TEMPLATE
@@ -34,6 +28,10 @@ global_task_template: &GLOBAL_TASK_TEMPLATE
 
 task:
   name: "lcov"
+  container:
+    image: ubuntu:devel
+    cpu: 2
+    memory: 8G
   depends_on:
     - fuzz_cov
   << : *GLOBAL_TASK_TEMPLATE
@@ -44,7 +42,7 @@ task:
     - make -C ../depends NO_BOOST=1 NO_LIBEVENT=1 NO_QT=1 NO_SQLITE=1 NO_NATPMP=1 NO_UPNP=1 NO_ZMQ=1 NO_USDT=1
     - export BDB_PREFIX='/tmp/cirrus-ci-build/bitcoin-core/depends/x86_64-pc-linux-gnu'
     - ../configure BDB_LIBS="-L${BDB_PREFIX}/lib -ldb_cxx-4.8" BDB_CFLAGS="-I${BDB_PREFIX}/include" --enable-zmq --enable-lcov --enable-lcov-branch-coverage --disable-bench --enable-extended-functional-tests
-    - make $MAKEJOBS
+    - make -j$(nproc)
     - make cov
   upload_script:
     - git checkout site
@@ -61,12 +59,16 @@ task:
 
 task:
   name: "fuzz_cov"
+  container:
+    image: ubuntu:devel
+    cpu: 1
+    memory: 4G
   << : *GLOBAL_TASK_TEMPLATE
   build_script:
     - cd bitcoin-core/build
     - git clone https://github.com/bitcoin-core/qa-assets --depth=1
     - ../configure --enable-fuzz --with-sanitizers=fuzzer --enable-lcov --enable-lcov-branch-coverage CC=clang CXX=clang++
-    - make $MAKEJOBS
+    - make -j$(nproc)
     - make cov_fuzz
   upload_script:
     - git checkout site
