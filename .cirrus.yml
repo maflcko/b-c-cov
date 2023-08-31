@@ -2,10 +2,9 @@ container:
   image: ubuntu:devel
   cpu: 2
   memory: 8G
-  greedy: true
 timeout_in: 120m
 env:
-  MAKEJOBS: "-j6"
+  MAKEJOBS: "-j4"
   TEST_RUNNER_PORT_MIN: "14000"  # Must be larger than 12321, which is used for the http cache. See https://cirrus-ci.org/guide/writing-tasks/#http-cache
   LC_ALL: "C.UTF-8"
   ID_SSH: "ENCRYPTED[1de2b39093c252cd779b9f3a8e3f815d1ca100a9a71df1e6751873833670d3efa41856c14c393349de58324ca935f7c5]"
