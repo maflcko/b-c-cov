@@ -1,5 +1,8 @@
-persistent_worker: {}
-timeout_in: 240m
+container:
+  image: ubuntu:devel
+  cpu: 2
+  memory: 8G
+timeout_in: 120m
 env:
   MAKEJOBS: "-j4"
   TEST_RUNNER_PORT_MIN: "14000"  # Must be larger than 12321, which is used for the http cache. See https://cirrus-ci.org/guide/writing-tasks/#http-cache
