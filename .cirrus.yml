@@ -1,7 +1,9 @@
-container:
-  image: ubuntu:jammy
+compute_engine_instance:
+  disk: 50
   cpu: 2
   memory: 8G
+  image_project: ubuntu-os-cloud
+  image: family/ubuntu-2204-lts
 timeout_in: 120m
 env:
   MAKEJOBS: "-j4"
