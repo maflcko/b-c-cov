@@ -1,5 +1,5 @@
 container:
-  image: ubuntu:jammy
+  image: ubuntu:lunar  # Use "devel" once and if https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1043009 is fixed
   cpu: 2
   memory: 8G
 timeout_in: 120m
@@ -7,7 +7,7 @@ env:
   MAKEJOBS: "-j4"
   TEST_RUNNER_PORT_MIN: "14000"  # Must be larger than 12321, which is used for the http cache. See https://cirrus-ci.org/guide/writing-tasks/#http-cache
   LC_ALL: "C.UTF-8"
-  ID_SSH: "ENCRYPTED[1de2b39093c252cd779b9f3a8e3f815d1ca100a9a71df1e6751873833670d3efa41856c14c393349de58324ca935f7c5]"
+  ID_SSH: "ENCRYPTED[9a36bf88d0eaa01f30b135f3a93c3026f8e43b7e13db016ff274927af64fe51ab4edf6f25c19265a2efc726fed1230ec]"
 global_task_template: &GLOBAL_TASK_TEMPLATE
   install_packages_script:
     - apt update && apt install -y git python3-zmq libevent-dev libboost-dev libsqlite3-dev libminiupnpc-dev libzmq3-dev lcov build-essential libtool autotools-dev automake pkg-config bsdmainutils bsdextrautils clang llvm curl
