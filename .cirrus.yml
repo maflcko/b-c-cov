@@ -1,5 +1,5 @@
 container:
-  image: ubuntu:lunar  # Use "devel" once and if https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1043009 is fixed
+  image: ubuntu:devel
   cpu: 2
   memory: 8G
 timeout_in: 120m
