@@ -1,5 +1,5 @@
 container:
-  image: ubuntu:devel
+  image: ubuntu:lunar  # Use "devel" once and if https://github.com/bitcoin/bitcoin/issues/28468#issuecomment-1790901853 is fixed
   cpu: 2
   memory: 8G
 timeout_in: 120m
