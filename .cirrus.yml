@@ -43,7 +43,7 @@ task:
     - cd build
     - make -C ../depends NO_BOOST=1 NO_LIBEVENT=1 NO_QT=1 NO_SQLITE=1 NO_NATPMP=1 NO_UPNP=1 NO_ZMQ=1 NO_USDT=1
     - export BDB_PREFIX="$PWD/../depends/x86_64-pc-linux-gnu"
-    - ../configure BDB_LIBS="-L${BDB_PREFIX}/lib -ldb_cxx-4.8" BDB_CFLAGS="-I${BDB_PREFIX}/include" --enable-zmq --enable-lcov --disable-bench --enable-extended-functional-tests LCOV_OPTS="--rc branch_coverage=1 --ignore-errors mismatch"
+    - ../configure BDB_LIBS="-L${BDB_PREFIX}/lib -ldb_cxx-4.8" BDB_CFLAGS="-I${BDB_PREFIX}/include" --enable-zmq --enable-lcov --disable-bench --enable-extended-functional-tests LCOV_OPTS="--rc branch_coverage=1 --ignore-errors mismatch,inconsistent"
     - make $MAKEJOBS
     - make cov
   upload_script:
