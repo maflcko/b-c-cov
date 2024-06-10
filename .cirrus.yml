@@ -10,7 +10,6 @@ env:
   ID_SSH: "ENCRYPTED[9a36bf88d0eaa01f30b135f3a93c3026f8e43b7e13db016ff274927af64fe51ab4edf6f25c19265a2efc726fed1230ec]"
 global_task_template: &GLOBAL_TASK_TEMPLATE
   install_packages_script:
-    - sed -i 's/noble/oracular/g' /etc/apt/sources.list.d/ubuntu.sources  # Remove temporary workaround once oracular is tagged in https://hub.docker.com/_/ubuntu
     - apt update && apt install -y git python3-zmq libevent-dev libboost-dev libsqlite3-dev libminiupnpc-dev libzmq3-dev lcov build-essential libtool autotools-dev automake pkg-config bsdmainutils bsdextrautils clang llvm curl
   prepare_script:
     - mkdir -p ~/.ssh
