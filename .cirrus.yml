@@ -60,7 +60,7 @@ task:
   build_script:
     - cd bitcoin-core
     - git clone https://github.com/bitcoin-core/qa-assets --depth=1
-    - cmake -B ./bld-fuzz -DBUILD_FOR_FUZZING=ON -DAPPEND_CXXFLAGS='-fprofile-update=atomic' -DAPPEND_CFLAGS='-fprofile-update=atomic' -DCMAKE_BUILD_TYPE=Coverage"
+    - cmake -B ./bld-fuzz -DBUILD_FOR_FUZZING=ON -DAPPEND_CXXFLAGS='-fprofile-update=atomic' -DAPPEND_CFLAGS='-fprofile-update=atomic' -DCMAKE_BUILD_TYPE=Coverage
     - cmake --build ./bld-fuzz -j $NUM_MAKE
     - cmake -DJOBS=$NUM_MAKE -DFUZZ_CORPORA_DIR=$PWD/qa-assets/fuzz_corpora -DLCOV_OPTS='--rc branch_coverage=1 --ignore-errors mismatch,mismatch,inconsistent,inconsistent' -P ./bld-fuzz/CoverageFuzz.cmake
   upload_script:
