@@ -68,8 +68,8 @@ task:
     - export OTHER_COV_COMMIT=$(git log -1 --grep="lcov results" --format=%H)
     - git reset --hard origin_git/site_init
     - git cherry-pick $OTHER_COV_COMMIT --allow-empty
-    - chown -R $(id -u):$(id -g) ./bitcoin-core/build/
-    - cp -r ./bitcoin-core/build/*coverage ./
+    - chown -R $(id -u):$(id -g) ./bitcoin-core/bld-fuzz/
+    - cp -r ./bitcoin-core/bld-fuzz/*coverage ./
     - git add ./*coverage* && git commit -m "fuzz_cov results for upstream@${MASTER_COMMIT}"
     - eval `ssh-agent -s`
     - ssh-add ~/.ssh/id_ssh
