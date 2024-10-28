@@ -38,7 +38,7 @@ task:
     - make -C ./depends NO_BOOST=1 NO_LIBEVENT=1 NO_QT=1 NO_SQLITE=1 NO_NATPMP=1 NO_UPNP=1 NO_ZMQ=1 NO_USDT=1
     - export BDB_PREFIX="$PWD/./depends/x86_64-pc-linux-gnu"
     #- BDB_LIBS="-L${BDB_PREFIX}/lib -ldb_cxx-4.8" BDB_CFLAGS="-I${BDB_PREFIX}/include"
-    - cmake -B ./bld-cov -DAPPEND_CXXFLAGS='-fprofile-update=atomic' -DAPPEND_CFLAGS='-fprofile-update=atomic' -DCMAKE_BUILD_TYPE=Coverage -DWITH_ZMQ=ON
+    - cmake -B ./bld-cov CC='gcc -fprofile-update=atomic' CXX='g++ -fprofile-update=atomic' -DCMAKE_BUILD_TYPE=Coverage -DWITH_ZMQ=ON
     - cmake --build ./bld-cov -j $NUM_MAKE
     - cmake -DJOBS=$NUM_MAKE -DEXTENDED_FUNCTIONAL_TESTS=ON -DLCOV_OPTS='--rc branch_coverage=1 --ignore-errors mismatch,mismatch,inconsistent,inconsistent' -P ./bld-cov/Coverage.cmake
   upload_script:
