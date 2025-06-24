@@ -10,7 +10,7 @@ env:
   ID_SSH: "ENCRYPTED[9a36bf88d0eaa01f30b135f3a93c3026f8e43b7e13db016ff274927af64fe51ab4edf6f25c19265a2efc726fed1230ec]"
 global_task_template: &GLOBAL_TASK_TEMPLATE
   install_packages_script:
-    - apt update && apt install -y git python3-zmq libevent-dev libboost-dev libsqlite3-dev libzmq3-dev lcov build-essential cmake pkg-config curl openssh-client
+    - apt update && apt install -y git python3-zmq libevent-dev libboost-dev libsqlite3-dev libzmq3-dev lcov build-essential cmake pkg-config curl openssh-client ca-certificates
   prepare_script:
     - mkdir -p ~/.ssh
     - ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
