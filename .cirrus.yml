@@ -34,7 +34,7 @@ task:
   build_script:
     - cd bitcoin-core
     - sed -i 's|functional/test_runner.py|functional/test_runner.py --previous-releases --timeout-factor=10 --exclude=feature_dbcrash|g' ./cmake/script/Coverage.cmake
-    - ./test/get_previous_releases.py -b -t ./bld-cov/releases
+    - ./test/get_previous_releases.py --target-dir ./bld-cov/releases
     #- make -C ./depends NO_BOOST=1 NO_LIBEVENT=1 NO_QT=1 NO_SQLITE=1 NO_ZMQ=1 NO_USDT=1
     #- export BDB_PREFIX="$PWD/./depends/x86_64-pc-linux-gnu"
     #- -DBerkeleyDB_INCLUDE_DIR:PATH="${BDB_PREFIX}/include" -DWITH_BDB=ON
