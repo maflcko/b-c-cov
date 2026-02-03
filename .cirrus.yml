@@ -11,7 +11,7 @@ env:
 global_task_template: &GLOBAL_TASK_TEMPLATE
   install_packages_script:
     - apt update && apt install -y git python3-zmq libevent-dev libboost-dev libsqlite3-dev libcapnp-dev capnproto libzmq3-dev lcov build-essential cmake pkg-config curl openssh-client ca-certificates
-  prepare_script:
+  prepare_ssh_git_script:
     - mkdir -p ~/.ssh
     - ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
     - echo "$ID_SSH" > ~/.ssh/id_ssh
@@ -22,8 +22,11 @@ global_task_template: &GLOBAL_TASK_TEMPLATE
     - git config user.email "ci@none.org"
     - git remote add origin_git git@github.com:${CIRRUS_REPO_FULL_NAME}.git  # Add remote so we can push there
     - git fetch origin_git
+  prepare_bc_script:
     - git clone --depth=1 https://github.com/bitcoin/bitcoin bitcoin-core
     - cd bitcoin-core
+    - sed -i '/list(APPEND LCOV_FILTER_COMMAND -p "src/d' cmake/script/CoverageInclude.cmake.in
+    - git diff
     - export MASTER_COMMIT=$(git log --format='%H' -1)
 
 task:
