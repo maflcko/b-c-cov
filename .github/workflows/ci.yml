@@ -1,7 +1,9 @@
 name: Coverage
 
 on:
-  push  # No pull requests allowed, due to secrets
+  push:  # No pull requests allowed, due to secrets
+  schedule:
+   - cron: '49 04 */2 * *'  # Every second day
 
 jobs:
   lcov:
