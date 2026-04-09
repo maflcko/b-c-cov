@@ -32,10 +32,10 @@ jobs:
           chmod 600 ~/.ssh/id_ssh
           eval "$(ssh-agent -s)"
           ssh-add ~/.ssh/id_ssh
-          git clone "https://github.com/${GITHUB_REPOSITORY}.git" .
+          git clone --origin=origin_git --branch=site "git@github.com:${GITHUB_REPOSITORY}.git" ./cov_repo
+          cd ./cov_repo
           git config user.name "CI/${GITHUB_REPOSITORY}"
           git config user.email "ci@none.org"
-          git remote add origin_git "git@github.com:${GITHUB_REPOSITORY}.git"  # Add remote so we can push there
           git fetch origin_git
 
       - &prepare_bitcoin_core
@@ -61,12 +61,12 @@ jobs:
       - name: Upload lcov
         run: |
           set -euxo pipefail
-          git checkout site
+          cd ./cov_repo
           export OTHER_COV_COMMIT="$(git log -1 --grep='fuzz_cov results' --format=%H)"
           git reset --hard origin_git/site_init
           git cherry-pick "$OTHER_COV_COMMIT" --allow-empty
-          chown -R "$(id -u):$(id -g)" ./bitcoin-core/bld-cov/
-          cp -r ./bitcoin-core/bld-cov/*coverage ./
+          chown -R "$(id -u):$(id -g)" ../bitcoin-core/bld-cov/
+          cp -r ../bitcoin-core/bld-cov/*coverage ./
           git add ./*coverage* && git commit -m "lcov results for upstream@${MASTER_COMMIT}"
           eval "$(ssh-agent -s)"
           ssh-add ~/.ssh/id_ssh
@@ -96,12 +96,12 @@ jobs:
       - name: Upload fuzz coverage
         run: |
           set -euxo pipefail
-          git checkout site
+          cd ./cov_repo
           export OTHER_COV_COMMIT="$(git log -1 --grep='lcov results' --format=%H)"
           git reset --hard origin_git/site_init
           git cherry-pick "$OTHER_COV_COMMIT" --allow-empty
-          chown -R "$(id -u):$(id -g)" ./bitcoin-core/bld-fuzz/
-          cp -r ./bitcoin-core/bld-fuzz/*coverage ./
+          chown -R "$(id -u):$(id -g)" ../bitcoin-core/bld-fuzz/
+          cp -r ../bitcoin-core/bld-fuzz/*coverage ./
           git add ./*coverage* && git commit -m "fuzz_cov results for upstream@${MASTER_COMMIT}"
           eval "$(ssh-agent -s)"
           ssh-add ~/.ssh/id_ssh
