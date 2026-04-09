@@ -32,6 +32,7 @@ jobs:
           chmod 600 ~/.ssh/id_ssh
           eval "$(ssh-agent -s)"
           ssh-add ~/.ssh/id_ssh
+          git clone "https://github.com/${GITHUB_REPOSITORY}.git" .
           git config user.name "CI/${GITHUB_REPOSITORY}"
           git config user.email "ci@none.org"
           git remote add origin_git "git@github.com:${GITHUB_REPOSITORY}.git"  # Add remote so we can push there
