@@ -26,12 +26,13 @@ jobs:
           ID_SSH: ${{ secrets.ID_SSH }}
         run: |
           set -euxo pipefail
-          mkdir -p ~/.ssh
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
-          printf '%s\n' "$ID_SSH" > ~/.ssh/id_ssh
-          chmod 600 ~/.ssh/id_ssh
+          mkdir -p /root/.ssh
+          chmod 700 /root/.ssh
+          ssh-keyscan github.com >> /root/.ssh/known_hosts
+          printf '%s\n' "$ID_SSH" > /root/.ssh/id_ssh
+          chmod 600 /root/.ssh/id_ssh
           eval "$(ssh-agent -s)"
-          ssh-add ~/.ssh/id_ssh
+          ssh-add /root/.ssh/id_ssh
           git clone --origin=origin_git --branch=site "git@github.com:${GITHUB_REPOSITORY}.git" ./cov_repo
           cd ./cov_repo
           git config user.name "CI/${GITHUB_REPOSITORY}"
@@ -69,7 +70,7 @@ jobs:
           cp -r ../bitcoin-core/bld-cov/*coverage ./
           git add ./*coverage* && git commit -m "lcov results for upstream@${MASTER_COMMIT}"
           eval "$(ssh-agent -s)"
-          ssh-add ~/.ssh/id_ssh
+          ssh-add /root/.ssh/id_ssh
           git push origin_git site -f
 
   fuzz_cov:
@@ -104,5 +105,5 @@ jobs:
           cp -r ../bitcoin-core/bld-fuzz/*coverage ./
           git add ./*coverage* && git commit -m "fuzz_cov results for upstream@${MASTER_COMMIT}"
           eval "$(ssh-agent -s)"
-          ssh-add ~/.ssh/id_ssh
+          ssh-add /root/.ssh/id_ssh
           git push origin_git site -f
