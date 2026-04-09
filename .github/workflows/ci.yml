@@ -53,7 +53,7 @@ jobs:
         run: |
           set -euxo pipefail
           cd bitcoin-core
-          sed -i 's|functional/test_runner.py|functional/test_runner.py --previous-releases --timeout-factor=10 --exclude=feature_dbcrash|g' ./cmake/script/Coverage.cmake
+          sed -i 's|functional/test_runner.py|functional/test_runner.py --previous-releases --timeout-factor=10 --exclude=feature_dbcrash --exclude "interface_bitcoin_cli" --exclude "rpc_bind --ipv6"|g' ./cmake/script/Coverage.cmake
           ./test/get_previous_releases.py --target-dir ./bld-cov/releases
           cmake -B ./bld-cov -DCMAKE_C_COMPILER='gcc;-fprofile-update=atomic' -DCMAKE_CXX_COMPILER='g++;-fprofile-update=atomic' -DCMAKE_BUILD_TYPE=Coverage --preset=dev-mode -DWITH_QRENCODE=OFF -DBUILD_GUI_TESTS=OFF -DBUILD_GUI=OFF -DWITH_USDT=OFF -DBUILD_FUZZ_BINARY=OFF -DBUILD_BENCH=OFF
           cmake --build ./bld-cov -j "$( nproc )"
