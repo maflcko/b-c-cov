@@ -12,7 +12,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 120
     container:
-      image: ubuntu:devel
+      # Keep coverage on the previous stable Ubuntu release until lcov 2.5
+      # can be used without corrupting the combined tracefile. See:
+      # https://github.com/maflcko/b-c-cov/actions/runs/30426022938/job/90517610516#step:6:4132
+      # "genhtml: ERROR: (corrupt) unable to read trace file 'total_coverage.info': genhtml: ERROR: invalid counts: found:14->14, hit:5->6 at /usr/share/perl5/lcovutil.pm line 5578, <INFO> line 3078."
+      image: ubuntu:26.04
     steps:
       - &install_packages
         name: Install packages
