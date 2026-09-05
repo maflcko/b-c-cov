@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - total_coverage.info - src/leveldb/db/write_batch_internal.h</title>
+  <link rel="stylesheet" type="text/css" href="../../../gcov.css">
+</head>
+
+<body>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="title">LCOV - code coverage report</td></tr>
+            <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+
+            <tr>
+              <td width="100%">
+                <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="10%" class="headerValue"><a href="../../../index.html" title="Click to go to top-level">top level</a> - <a href="index.html" title="Click to go to directory src/leveldb/db">src/leveldb/db</a> - write_batch_internal.h</td>
+            <td width="5%"></td>
+            <td width="5%"></td>
+            <td width="5%" class="headerCovTableHead">Coverage</td>
+            <td width="5%" class="headerCovTableHead" title="Covered + Uncovered code">Total</td>
+            <td width="5%" class="headerCovTableHead" title="Exercised code only">Hit</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">total_coverage.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntryHi">100.0&nbsp;%</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntry">2</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test Date:</td>
+            <td class="headerValue">2026-09-05 06:08:39</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntryHi">-</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">0</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntryLo">41.7&nbsp;%</td>
+            <td class="headerCovTableEntry">12</td>
+            <td class="headerCovTableEntry">5</td>
+          </tr>
+                  <tr><td><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+          </table>
+
+          <table cellpadding=0 cellspacing=0 border=0>
+            <tr>
+              <td><br></td>
+            </tr>
+            <tr>
+              <td>
+<pre class="sourceHeading">             Branch data     Line data    Source code</pre>
+<pre class="source">
+<span id="L1"><span class="lineNum">       1</span>                 :             : // Copyright (c) 2011 The LevelDB Authors. All rights reserved.</span>
+<span id="L2"><span class="lineNum">       2</span>                 :             : // Use of this source code is governed by a BSD-style license that can be</span>
+<span id="L3"><span class="lineNum">       3</span>                 :             : // found in the LICENSE file. See the AUTHORS file for names of contributors.</span>
+<span id="L4"><span class="lineNum">       4</span>                 :             : </span>
+<span id="L5"><span class="lineNum">       5</span>                 :             : #ifndef STORAGE_LEVELDB_DB_WRITE_BATCH_INTERNAL_H_</span>
+<span id="L6"><span class="lineNum">       6</span>                 :             : #define STORAGE_LEVELDB_DB_WRITE_BATCH_INTERNAL_H_</span>
+<span id="L7"><span class="lineNum">       7</span>                 :             : </span>
+<span id="L8"><span class="lineNum">       8</span>                 :             : #include &quot;db/dbformat.h&quot;</span>
+<span id="L9"><span class="lineNum">       9</span>                 :             : #include &quot;leveldb/write_batch.h&quot;</span>
+<span id="L10"><span class="lineNum">      10</span>                 :             : </span>
+<span id="L11"><span class="lineNum">      11</span>                 :             : namespace leveldb {</span>
+<span id="L12"><span class="lineNum">      12</span>                 :             : </span>
+<span id="L13"><span class="lineNum">      13</span>                 :             : class MemTable;</span>
+<span id="L14"><span class="lineNum">      14</span>                 :             : </span>
+<span id="L15"><span class="lineNum">      15</span>                 :             : // WriteBatchInternal provides static methods for manipulating a</span>
+<span id="L16"><span class="lineNum">      16</span>                 :             : // WriteBatch that we don't want in the public WriteBatch interface.</span>
+<span id="L17"><span class="lineNum">      17</span>                 :             : class WriteBatchInternal {</span>
+<span id="L18"><span class="lineNum">      18</span>                 :             :  public:</span>
+<span id="L19"><span class="lineNum">      19</span>                 :             :   // Return the number of entries in the batch.</span>
+<span id="L20"><span class="lineNum">      20</span>                 :             :   static int Count(const WriteBatch* batch);</span>
+<span id="L21"><span class="lineNum">      21</span>                 :             : </span>
+<span id="L22"><span class="lineNum">      22</span>                 :             :   // Set the count for the number of entries in the batch.</span>
+<span id="L23"><span class="lineNum">      23</span>                 :             :   static void SetCount(WriteBatch* batch, int n);</span>
+<span id="L24"><span class="lineNum">      24</span>                 :             : </span>
+<span id="L25"><span class="lineNum">      25</span>                 :             :   // Return the sequence number for the start of this batch.</span>
+<span id="L26"><span class="lineNum">      26</span>                 :             :   static SequenceNumber Sequence(const WriteBatch* batch);</span>
+<span id="L27"><span class="lineNum">      27</span>                 :             : </span>
+<span id="L28"><span class="lineNum">      28</span>                 :             :   // Store the specified number as the sequence number for the start of</span>
+<span id="L29"><span class="lineNum">      29</span>                 :             :   // this batch.</span>
+<span id="L30"><span class="lineNum">      30</span>                 :             :   static void SetSequence(WriteBatch* batch, SequenceNumber seq);</span>
+<span id="L31"><span class="lineNum">      31</span>                 :             : </span>
+<span id="L32"><span class="lineNum">      32</span>   [<span class="tlaUNC" title="Branch 0 was not taken"> - </span><span class="tlaGBC" title="Branch 1 was taken 44617 times"> + </span><span class="tlaGBC" title="Branch 2 was taken 44617 times"> + </span><span class="tlaUNC" title="Branch 3 was not taken"> - </span>]:<span class="tlaGNC">       44617 :   static Slice Contents(const WriteBatch* batch) { return Slice(batch-&gt;rep_); }</span></span>
+<span id="L33"><span class="lineNum">      33</span>                 :             : </span>
+<span id="L34"><span class="lineNum">      34</span>   [<span class="tlaUNC" title="Branch 0 was not taken"> - </span><span class="tlaGBC" title="Branch 1 was taken 44617 times"> + </span><span class="tlaGBC" title="Branch 2 was taken 44561 times"> + </span><span class="tlaGBC" title="Branch 3 was taken 56 times"> + </span> :<span class="tlaGNC">       44617 :   static size_t ByteSize(const WriteBatch* batch) { return batch-&gt;rep_.size(); }</span></span>
+<span class="lineNum">        </span>    <span class="tlaUNC" title="Branch 4 was not taken"> - </span><span class="tlaUNC" title="Branch 5 was not taken"> - </span><span class="tlaUNC" title="Branch 6 was not taken"> - </span><span class="tlaUNC" title="Branch 7 was not taken"> - </span>]
+<span id="L35"><span class="lineNum">      35</span>                 :             : </span>
+<span id="L36"><span class="lineNum">      36</span>                 :             :   static void SetContents(WriteBatch* batch, const Slice&amp; contents);</span>
+<span id="L37"><span class="lineNum">      37</span>                 :             : </span>
+<span id="L38"><span class="lineNum">      38</span>                 :             :   static Status InsertInto(const WriteBatch* batch, MemTable* memtable);</span>
+<span id="L39"><span class="lineNum">      39</span>                 :             : </span>
+<span id="L40"><span class="lineNum">      40</span>                 :             :   static void Append(WriteBatch* dst, const WriteBatch* src);</span>
+<span id="L41"><span class="lineNum">      41</span>                 :             : };</span>
+<span id="L42"><span class="lineNum">      42</span>                 :             : </span>
+<span id="L43"><span class="lineNum">      43</span>                 :             : }  // namespace leveldb</span>
+<span id="L44"><span class="lineNum">      44</span>                 :             : </span>
+<span id="L45"><span class="lineNum">      45</span>                 :             : #endif  // STORAGE_LEVELDB_DB_WRITE_BATCH_INTERNAL_H_</span>
+        </pre>
+              </td>
+            </tr>
+          </table>
+          <br>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+            <tr><td class="versionInfo">Generated by: <a href="https://github.com//linux-test-project/lcov" target="_parent">LCOV version 2.0-1</a></td></tr>
+          </table>
+          <br>
+
+</body>
+</html>

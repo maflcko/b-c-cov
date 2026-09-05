@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - total_coverage.info - src/crc32c/src/crc32c_round_up.h</title>
+  <link rel="stylesheet" type="text/css" href="../../../gcov.css">
+</head>
+
+<body>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="title">LCOV - code coverage report</td></tr>
+            <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+
+            <tr>
+              <td width="100%">
+                <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="10%" class="headerValue"><a href="../../../index.html" title="Click to go to top-level">top level</a> - <a href="index.html" title="Click to go to directory src/crc32c/src">src/crc32c/src</a> - crc32c_round_up.h</td>
+            <td width="5%"></td>
+            <td width="5%"></td>
+            <td width="5%" class="headerCovTableHead">Coverage</td>
+            <td width="5%" class="headerCovTableHead" title="Covered + Uncovered code">Total</td>
+            <td width="5%" class="headerCovTableHead" title="Exercised code only">Hit</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">total_coverage.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntryHi">100.0&nbsp;%</td>
+            <td class="headerCovTableEntry">4</td>
+            <td class="headerCovTableEntry">4</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test Date:</td>
+            <td class="headerValue">2026-09-05 06:08:39</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntryHi">-</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">0</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntryHi">100.0&nbsp;%</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntry">2</td>
+          </tr>
+                  <tr><td><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+          </table>
+
+          <table cellpadding=0 cellspacing=0 border=0>
+            <tr>
+              <td><br></td>
+            </tr>
+            <tr>
+              <td>
+<pre class="sourceHeading">             Branch data     Line data    Source code</pre>
+<pre class="source">
+<span id="L1"><span class="lineNum">       1</span>                 :             : // Copyright 2017 The CRC32C Authors. All rights reserved.</span>
+<span id="L2"><span class="lineNum">       2</span>                 :             : // Use of this source code is governed by a BSD-style license that can be</span>
+<span id="L3"><span class="lineNum">       3</span>                 :             : // found in the LICENSE file. See the AUTHORS file for names of contributors.</span>
+<span id="L4"><span class="lineNum">       4</span>                 :             : </span>
+<span id="L5"><span class="lineNum">       5</span>                 :             : #ifndef CRC32C_CRC32C_ROUND_UP_H_</span>
+<span id="L6"><span class="lineNum">       6</span>                 :             : #define CRC32C_CRC32C_ROUND_UP_H_</span>
+<span id="L7"><span class="lineNum">       7</span>                 :             : </span>
+<span id="L8"><span class="lineNum">       8</span>                 :             : #include &lt;cstddef&gt;</span>
+<span id="L9"><span class="lineNum">       9</span>                 :             : #include &lt;cstdint&gt;</span>
+<span id="L10"><span class="lineNum">      10</span>                 :             : </span>
+<span id="L11"><span class="lineNum">      11</span>                 :             : namespace crc32c {</span>
+<span id="L12"><span class="lineNum">      12</span>                 :             : </span>
+<span id="L13"><span class="lineNum">      13</span>                 :             : // Returns the smallest number &gt;= the given number that is evenly divided by N.</span>
+<span id="L14"><span class="lineNum">      14</span>                 :             : //</span>
+<span id="L15"><span class="lineNum">      15</span>                 :             : // N must be a power of two.</span>
+<span id="L16"><span class="lineNum">      16</span>                 :             : template &lt;int N&gt;</span>
+<span id="L17"><span class="lineNum">      17</span>                 :<span class="tlaGNC">      209153 : constexpr inline uintptr_t RoundUp(uintptr_t pointer) {</span></span>
+<span id="L18"><span class="lineNum">      18</span>                 :             :   static_assert((N &amp; (N - 1)) == 0, &quot;N must be a power of two&quot;);</span>
+<span id="L19"><span class="lineNum">      19</span>                 :<span class="tlaGNC">      209153 :   return (pointer + (N - 1)) &amp; ~(N - 1);</span></span>
+<span id="L20"><span class="lineNum">      20</span>                 :             : }</span>
+<span id="L21"><span class="lineNum">      21</span>                 :             : </span>
+<span id="L22"><span class="lineNum">      22</span>                 :             : // Returns the smallest address &gt;= the given address that is aligned to N bytes.</span>
+<span id="L23"><span class="lineNum">      23</span>                 :             : //</span>
+<span id="L24"><span class="lineNum">      24</span>                 :             : // N must be a power of two.</span>
+<span id="L25"><span class="lineNum">      25</span>                 :             : template &lt;int N&gt;</span>
+<span id="L26"><span class="lineNum">      26</span>                 :<span class="tlaGNC">      209153 : constexpr inline const uint8_t* RoundUp(const uint8_t* pointer) {</span></span>
+<span id="L27"><span class="lineNum">      27</span>                 :             :   static_assert((N &amp; (N - 1)) == 0, &quot;N must be a power of two&quot;);</span>
+<span id="L28"><span class="lineNum">      28</span>                 :             :   return reinterpret_cast&lt;uint8_t*&gt;(</span>
+<span id="L29"><span class="lineNum">      29</span>         [<span class="tlaGBC" title="Branch 0 was taken 193069 times"> + </span><span class="tlaGBC" title="Branch 1 was taken 16084 times"> + </span>]:<span class="tlaGNC">      209153 :       RoundUp&lt;N&gt;(reinterpret_cast&lt;uintptr_t&gt;(pointer)));</span></span>
+<span id="L30"><span class="lineNum">      30</span>                 :             : }</span>
+<span id="L31"><span class="lineNum">      31</span>                 :             : </span>
+<span id="L32"><span class="lineNum">      32</span>                 :             : }  // namespace crc32c</span>
+<span id="L33"><span class="lineNum">      33</span>                 :             : </span>
+<span id="L34"><span class="lineNum">      34</span>                 :             : #endif  // CRC32C_CRC32C_ROUND_UP_H_</span>
+        </pre>
+              </td>
+            </tr>
+          </table>
+          <br>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+            <tr><td class="versionInfo">Generated by: <a href="https://github.com//linux-test-project/lcov" target="_parent">LCOV version 2.0-1</a></td></tr>
+          </table>
+          <br>
+
+</body>
+</html>

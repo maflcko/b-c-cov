@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - total_coverage.info - src/leveldb/util/random.h</title>
+  <link rel="stylesheet" type="text/css" href="../../../gcov.css">
+</head>
+
+<body>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="title">LCOV - code coverage report</td></tr>
+            <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+
+            <tr>
+              <td width="100%">
+                <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="10%" class="headerValue"><a href="../../../index.html" title="Click to go to top-level">top level</a> - <a href="index.html" title="Click to go to directory src/leveldb/util">src/leveldb/util</a> - random.h</td>
+            <td width="5%"></td>
+            <td width="5%"></td>
+            <td width="5%" class="headerCovTableHead">Coverage</td>
+            <td width="5%" class="headerCovTableHead" title="Covered + Uncovered code">Total</td>
+            <td width="5%" class="headerCovTableHead" title="Exercised code only">Hit</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">total_coverage.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntryMed">83.3&nbsp;%</td>
+            <td class="headerCovTableEntry">12</td>
+            <td class="headerCovTableEntry">10</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test Date:</td>
+            <td class="headerValue">2026-09-05 06:08:39</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntryHi">-</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">0</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntryLo">62.5&nbsp;%</td>
+            <td class="headerCovTableEntry">8</td>
+            <td class="headerCovTableEntry">5</td>
+          </tr>
+                  <tr><td><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+          </table>
+
+          <table cellpadding=0 cellspacing=0 border=0>
+            <tr>
+              <td><br></td>
+            </tr>
+            <tr>
+              <td>
+<pre class="sourceHeading">             Branch data     Line data    Source code</pre>
+<pre class="source">
+<span id="L1"><span class="lineNum">       1</span>                 :             : // Copyright (c) 2011 The LevelDB Authors. All rights reserved.</span>
+<span id="L2"><span class="lineNum">       2</span>                 :             : // Use of this source code is governed by a BSD-style license that can be</span>
+<span id="L3"><span class="lineNum">       3</span>                 :             : // found in the LICENSE file. See the AUTHORS file for names of contributors.</span>
+<span id="L4"><span class="lineNum">       4</span>                 :             : </span>
+<span id="L5"><span class="lineNum">       5</span>                 :             : #ifndef STORAGE_LEVELDB_UTIL_RANDOM_H_</span>
+<span id="L6"><span class="lineNum">       6</span>                 :             : #define STORAGE_LEVELDB_UTIL_RANDOM_H_</span>
+<span id="L7"><span class="lineNum">       7</span>                 :             : </span>
+<span id="L8"><span class="lineNum">       8</span>                 :             : #include &lt;stdint.h&gt;</span>
+<span id="L9"><span class="lineNum">       9</span>                 :             : </span>
+<span id="L10"><span class="lineNum">      10</span>                 :             : namespace leveldb {</span>
+<span id="L11"><span class="lineNum">      11</span>                 :             : </span>
+<span id="L12"><span class="lineNum">      12</span>                 :             : // A very simple random number generator.  Not especially good at</span>
+<span id="L13"><span class="lineNum">      13</span>                 :             : // generating truly random bits, but good enough for our needs in this</span>
+<span id="L14"><span class="lineNum">      14</span>                 :             : // package.</span>
+<span id="L15"><span class="lineNum">      15</span>                 :             : class Random {</span>
+<span id="L16"><span class="lineNum">      16</span>                 :             :  private:</span>
+<span id="L17"><span class="lineNum">      17</span>                 :             :   uint32_t seed_;</span>
+<span id="L18"><span class="lineNum">      18</span>                 :             : </span>
+<span id="L19"><span class="lineNum">      19</span>                 :             :  public:</span>
+<span id="L20"><span class="lineNum">      20</span>                 :<span class="tlaGNC">       10454 :   explicit Random(uint32_t s) : seed_(s &amp; 0x7fffffffu) {</span></span>
+<span id="L21"><span class="lineNum">      21</span>                 :             :     // Avoid bad seeds.</span>
+<span id="L22"><span class="lineNum">      22</span>         [<span class="tlaUNC" title="Branch 0 was not taken"> - </span><span class="tlaGBC" title="Branch 1 was taken 5531 times"> + </span>]:<span class="tlaGNC">       10454 :     if (seed_ == 0 || seed_ == 2147483647L) {</span></span>
+<span id="L23"><span class="lineNum">      23</span>                 :<span class="tlaUNC">           0 :       seed_ = 1;</span></span>
+<span id="L24"><span class="lineNum">      24</span>                 :             :     }</span>
+<span id="L25"><span class="lineNum">      25</span>                 :             :   }</span>
+<span id="L26"><span class="lineNum">      26</span>                 :<span class="tlaGNC">     1010716 :   uint32_t Next() {</span></span>
+<span id="L27"><span class="lineNum">      27</span>                 :<span class="tlaGNC">     1010716 :     static const uint32_t M = 2147483647L;  // 2^31-1</span></span>
+<span id="L28"><span class="lineNum">      28</span>                 :<span class="tlaGNC">     1010716 :     static const uint64_t A = 16807;        // bits 14, 8, 7, 5, 2, 1, 0</span></span>
+<span id="L29"><span class="lineNum">      29</span>                 :             :     // We are computing</span>
+<span id="L30"><span class="lineNum">      30</span>                 :             :     //       seed_ = (seed_ * A) % M,    where M = 2^31-1</span>
+<span id="L31"><span class="lineNum">      31</span>                 :             :     //</span>
+<span id="L32"><span class="lineNum">      32</span>                 :             :     // seed_ must not be zero or M, or else all subsequent computed values</span>
+<span id="L33"><span class="lineNum">      33</span>                 :             :     // will be zero or M respectively.  For all other values, seed_ will end</span>
+<span id="L34"><span class="lineNum">      34</span>                 :             :     // up cycling through every number in [1,M-1]</span>
+<span id="L35"><span class="lineNum">      35</span>                 :<span class="tlaGNC">     1010716 :     uint64_t product = seed_ * A;</span></span>
+<span id="L36"><span class="lineNum">      36</span>                 :             : </span>
+<span id="L37"><span class="lineNum">      37</span>                 :             :     // Compute (product % M) using the fact that ((x &lt;&lt; 31) % M) == x.</span>
+<span id="L38"><span class="lineNum">      38</span>                 :<span class="tlaGNC">     1010716 :     seed_ = static_cast&lt;uint32_t&gt;((product &gt;&gt; 31) + (product &amp; M));</span></span>
+<span id="L39"><span class="lineNum">      39</span>                 :             :     // The first reduction may overflow by 1 bit, so we may need to</span>
+<span id="L40"><span class="lineNum">      40</span>                 :             :     // repeat.  mod == M is not possible; using &gt; allows the faster</span>
+<span id="L41"><span class="lineNum">      41</span>                 :             :     // sign-bit-based test.</span>
+<span id="L42"><span class="lineNum">      42</span>         [<span class="tlaUNC" title="Branch 0 was not taken"> - </span><span class="tlaGBC" title="Branch 1 was taken 1004493 times"> + </span>]:<span class="tlaGNC">     1010716 :     if (seed_ &gt; M) {</span></span>
+<span id="L43"><span class="lineNum">      43</span>                 :<span class="tlaUNC">           0 :       seed_ -= M;</span></span>
+<span id="L44"><span class="lineNum">      44</span>                 :             :     }</span>
+<span id="L45"><span class="lineNum">      45</span>         [<span class="tlaGBC" title="Branch 0 was taken 241776 times"> + </span><span class="tlaGBC" title="Branch 1 was taken 762717 times"> + </span>]:<span class="tlaGNC">     1010716 :     return seed_;</span></span>
+<span id="L46"><span class="lineNum">      46</span>                 :             :   }</span>
+<span id="L47"><span class="lineNum">      47</span>                 :             :   // Returns a uniformly distributed value in the range [0..n-1]</span>
+<span id="L48"><span class="lineNum">      48</span>                 :             :   // REQUIRES: n &gt; 0</span>
+<span id="L49"><span class="lineNum">      49</span>         [<span class="tlaUNC" title="Branch 0 was not taken"> - </span><span class="tlaGBC" title="Branch 1 was taken 6223 times"> + </span>]:<span class="tlaGNC">        6223 :   uint32_t Uniform(int n) { return Next() % n; }</span></span>
+<span id="L50"><span class="lineNum">      50</span>                 :             : </span>
+<span id="L51"><span class="lineNum">      51</span>                 :             :   // Randomly returns true ~&quot;1/n&quot; of the time, and false otherwise.</span>
+<span id="L52"><span class="lineNum">      52</span>                 :             :   // REQUIRES: n &gt; 0</span>
+<span id="L53"><span class="lineNum">      53</span>                 :             :   bool OneIn(int n) { return (Next() % n) == 0; }</span>
+<span id="L54"><span class="lineNum">      54</span>                 :             : </span>
+<span id="L55"><span class="lineNum">      55</span>                 :             :   // Skewed: pick &quot;base&quot; uniformly from range [0,max_log] and then</span>
+<span id="L56"><span class="lineNum">      56</span>                 :             :   // return &quot;base&quot; random bits.  The effect is to pick a number in the</span>
+<span id="L57"><span class="lineNum">      57</span>                 :             :   // range [0,2^max_log-1] with exponential bias towards smaller numbers.</span>
+<span id="L58"><span class="lineNum">      58</span>                 :             :   uint32_t Skewed(int max_log) { return Uniform(1 &lt;&lt; Uniform(max_log + 1)); }</span>
+<span id="L59"><span class="lineNum">      59</span>                 :             : };</span>
+<span id="L60"><span class="lineNum">      60</span>                 :             : </span>
+<span id="L61"><span class="lineNum">      61</span>                 :             : }  // namespace leveldb</span>
+<span id="L62"><span class="lineNum">      62</span>                 :             : </span>
+<span id="L63"><span class="lineNum">      63</span>                 :             : #endif  // STORAGE_LEVELDB_UTIL_RANDOM_H_</span>
+        </pre>
+              </td>
+            </tr>
+          </table>
+          <br>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+            <tr><td class="versionInfo">Generated by: <a href="https://github.com//linux-test-project/lcov" target="_parent">LCOV version 2.0-1</a></td></tr>
+          </table>
+          <br>
+
+</body>
+</html>

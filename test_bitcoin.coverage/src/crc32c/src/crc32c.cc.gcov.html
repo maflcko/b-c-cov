@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - test_bitcoin_coverage.info - src/crc32c/src/crc32c.cc</title>
+  <link rel="stylesheet" type="text/css" href="../../../gcov.css">
+</head>
+
+<body>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="title">LCOV - code coverage report</td></tr>
+            <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+
+            <tr>
+              <td width="100%">
+                <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="10%" class="headerValue"><a href="../../../index.html" title="Click to go to top-level">top level</a> - <a href="index.html" title="Click to go to directory src/crc32c/src">src/crc32c/src</a> - crc32c.cc<span style="font-size: 80%;"> (source / <a href="crc32c.cc.func-c.html" title="Click to go to function table">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="5%"></td>
+            <td width="5%" class="headerCovTableHead">Coverage</td>
+            <td width="5%" class="headerCovTableHead" title="Covered + Uncovered code">Total</td>
+            <td width="5%" class="headerCovTableHead" title="Exercised code only">Hit</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">test_bitcoin_coverage.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntryLo">37.5&nbsp;%</td>
+            <td class="headerCovTableEntry">8</td>
+            <td class="headerCovTableEntry">3</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test Date:</td>
+            <td class="headerValue">2026-09-05 05:55:46</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntryLo">33.3&nbsp;%</td>
+            <td class="headerCovTableEntry">3</td>
+            <td class="headerCovTableEntry">1</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntryLo">66.7&nbsp;%</td>
+            <td class="headerCovTableEntry">6</td>
+            <td class="headerCovTableEntry">4</td>
+          </tr>
+                  <tr><td><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+          </table>
+
+          <table cellpadding=0 cellspacing=0 border=0>
+            <tr>
+              <td><br></td>
+            </tr>
+            <tr>
+              <td>
+<pre class="sourceHeading">             Branch data     Line data    Source code</pre>
+<pre class="source">
+<span id="L1"><span class="lineNum">       1</span>                 :             : // Copyright 2017 The CRC32C Authors. All rights reserved.</span>
+<span id="L2"><span class="lineNum">       2</span>                 :             : // Use of this source code is governed by a BSD-style license that can be</span>
+<span id="L3"><span class="lineNum">       3</span>                 :             : // found in the LICENSE file. See the AUTHORS file for names of contributors.</span>
+<span id="L4"><span class="lineNum">       4</span>                 :             : </span>
+<span id="L5"><span class="lineNum">       5</span>                 :             : #include &quot;crc32c/crc32c.h&quot;</span>
+<span id="L6"><span class="lineNum">       6</span>                 :             : </span>
+<span id="L7"><span class="lineNum">       7</span>                 :             : #include &lt;cstddef&gt;</span>
+<span id="L8"><span class="lineNum">       8</span>                 :             : #include &lt;cstdint&gt;</span>
+<span id="L9"><span class="lineNum">       9</span>                 :             : </span>
+<span id="L10"><span class="lineNum">      10</span>                 :             : #include &quot;./crc32c_arm64.h&quot;</span>
+<span id="L11"><span class="lineNum">      11</span>                 :             : #include &quot;./crc32c_arm64_check.h&quot;</span>
+<span id="L12"><span class="lineNum">      12</span>                 :             : #include &quot;./crc32c_internal.h&quot;</span>
+<span id="L13"><span class="lineNum">      13</span>                 :             : #include &quot;./crc32c_sse42.h&quot;</span>
+<span id="L14"><span class="lineNum">      14</span>                 :             : #include &quot;./crc32c_sse42_check.h&quot;</span>
+<span id="L15"><span class="lineNum">      15</span>                 :             : </span>
+<span id="L16"><span class="lineNum">      16</span>                 :             : namespace crc32c {</span>
+<span id="L17"><span class="lineNum">      17</span>                 :             : </span>
+<span id="L18"><span class="lineNum">      18</span>                 :<span class="tlaGNC">       17541 : uint32_t Extend(uint32_t crc, const uint8_t* data, size_t count) {</span></span>
+<span id="L19"><span class="lineNum">      19</span>                 :             : #if HAVE_SSE42 &amp;&amp; (defined(_M_X64) || defined(__x86_64__))</span>
+<span id="L20"><span class="lineNum">      20</span>   [<span class="tlaGBC" title="Branch 0 was taken 50 times"> + </span><span class="tlaGBC" title="Branch 1 was taken 17491 times"> + </span><span class="tlaGBC" title="Branch 2 was taken 50 times"> + </span><span class="tlaUNC" title="Branch 3 was not taken"> - </span>]:<span class="tlaGNC">       17541 :   static bool can_use_sse42 = CanUseSse42();</span></span>
+<span id="L21"><span class="lineNum">      21</span>         [<span class="tlaGBC" title="Branch 0 was taken 17541 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span>]:<span class="tlaGNC">       17541 :   if (can_use_sse42) return ExtendSse42(crc, data, count);</span></span>
+<span id="L22"><span class="lineNum">      22</span>                 :             : #elif HAVE_ARM64_CRC32C</span>
+<span id="L23"><span class="lineNum">      23</span>                 :             :   static bool can_use_arm64_crc32 = CanUseArm64Crc32();</span>
+<span id="L24"><span class="lineNum">      24</span>                 :             :   if (can_use_arm64_crc32) return ExtendArm64(crc, data, count);</span>
+<span id="L25"><span class="lineNum">      25</span>                 :             : #endif  // HAVE_SSE42 &amp;&amp; (defined(_M_X64) || defined(__x86_64__))</span>
+<span id="L26"><span class="lineNum">      26</span>                 :             : </span>
+<span id="L27"><span class="lineNum">      27</span>                 :<span class="tlaUNC">           0 :   return ExtendPortable(crc, data, count);</span></span>
+<span id="L28"><span class="lineNum">      28</span>                 :             : }</span>
+<span id="L29"><span class="lineNum">      29</span>                 :             : </span>
+<span id="L30"><span class="lineNum">      30</span>                 :<span class="tlaUNC">           0 : extern &quot;C&quot; uint32_t crc32c_extend(uint32_t crc, const uint8_t* data,</span></span>
+<span id="L31"><span class="lineNum">      31</span>                 :             :                                   size_t count) {</span>
+<span id="L32"><span class="lineNum">      32</span>                 :<span class="tlaUNC">           0 :   return crc32c::Extend(crc, data, count);</span></span>
+<span id="L33"><span class="lineNum">      33</span>                 :             : }</span>
+<span id="L34"><span class="lineNum">      34</span>                 :             : </span>
+<span id="L35"><span class="lineNum">      35</span>                 :<span class="tlaUNC">           0 : extern &quot;C&quot; uint32_t crc32c_value(const uint8_t* data, size_t count) {</span></span>
+<span id="L36"><span class="lineNum">      36</span>                 :<span class="tlaUNC">           0 :   return crc32c::Crc32c(data, count);</span></span>
+<span id="L37"><span class="lineNum">      37</span>                 :             : }</span>
+<span id="L38"><span class="lineNum">      38</span>                 :             : </span>
+<span id="L39"><span class="lineNum">      39</span>                 :             : }  // namespace crc32c</span>
+        </pre>
+              </td>
+            </tr>
+          </table>
+          <br>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+            <tr><td class="versionInfo">Generated by: <a href="https://github.com//linux-test-project/lcov" target="_parent">LCOV version 2.0-1</a></td></tr>
+          </table>
+          <br>
+
+</body>
+</html>

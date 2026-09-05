@@ -1,0 +1,168 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - test_bitcoin_coverage.info - src/leveldb/include/leveldb/write_batch.h</title>
+  <link rel="stylesheet" type="text/css" href="../../../../gcov.css">
+</head>
+
+<body>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="title">LCOV - code coverage report</td></tr>
+            <tr><td class="ruler"><img src="../../../../glass.png" width=3 height=3 alt=""></td></tr>
+
+            <tr>
+              <td width="100%">
+                <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="10%" class="headerValue"><a href="../../../../index.html" title="Click to go to top-level">top level</a> - <a href="index.html" title="Click to go to directory src/leveldb/include/leveldb">src/leveldb/include/leveldb</a> - write_batch.h</td>
+            <td width="5%"></td>
+            <td width="5%"></td>
+            <td width="5%" class="headerCovTableHead">Coverage</td>
+            <td width="5%" class="headerCovTableHead" title="Covered + Uncovered code">Total</td>
+            <td width="5%" class="headerCovTableHead" title="Exercised code only">Hit</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">test_bitcoin_coverage.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntryHi">100.0&nbsp;%</td>
+            <td class="headerCovTableEntry">1</td>
+            <td class="headerCovTableEntry">1</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test Date:</td>
+            <td class="headerValue">2026-09-05 05:55:46</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntryHi">-</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">0</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntryLo">50.0&nbsp;%</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntry">1</td>
+          </tr>
+                  <tr><td><img src="../../../../glass.png" width=3 height=3 alt=""></td></tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr><td class="ruler"><img src="../../../../glass.png" width=3 height=3 alt=""></td></tr>
+          </table>
+
+          <table cellpadding=0 cellspacing=0 border=0>
+            <tr>
+              <td><br></td>
+            </tr>
+            <tr>
+              <td>
+<pre class="sourceHeading">             Branch data     Line data    Source code</pre>
+<pre class="source">
+<span id="L1"><span class="lineNum">       1</span>                 :             : // Copyright (c) 2011 The LevelDB Authors. All rights reserved.</span>
+<span id="L2"><span class="lineNum">       2</span>                 :             : // Use of this source code is governed by a BSD-style license that can be</span>
+<span id="L3"><span class="lineNum">       3</span>                 :             : // found in the LICENSE file. See the AUTHORS file for names of contributors.</span>
+<span id="L4"><span class="lineNum">       4</span>                 :             : //</span>
+<span id="L5"><span class="lineNum">       5</span>                 :             : // WriteBatch holds a collection of updates to apply atomically to a DB.</span>
+<span id="L6"><span class="lineNum">       6</span>                 :             : //</span>
+<span id="L7"><span class="lineNum">       7</span>                 :             : // The updates are applied in the order in which they are added</span>
+<span id="L8"><span class="lineNum">       8</span>                 :             : // to the WriteBatch.  For example, the value of &quot;key&quot; will be &quot;v3&quot;</span>
+<span id="L9"><span class="lineNum">       9</span>                 :             : // after the following batch is written:</span>
+<span id="L10"><span class="lineNum">      10</span>                 :             : //</span>
+<span id="L11"><span class="lineNum">      11</span>                 :             : //    batch.Put(&quot;key&quot;, &quot;v1&quot;);</span>
+<span id="L12"><span class="lineNum">      12</span>                 :             : //    batch.Delete(&quot;key&quot;);</span>
+<span id="L13"><span class="lineNum">      13</span>                 :             : //    batch.Put(&quot;key&quot;, &quot;v2&quot;);</span>
+<span id="L14"><span class="lineNum">      14</span>                 :             : //    batch.Put(&quot;key&quot;, &quot;v3&quot;);</span>
+<span id="L15"><span class="lineNum">      15</span>                 :             : //</span>
+<span id="L16"><span class="lineNum">      16</span>                 :             : // Multiple threads can invoke const methods on a WriteBatch without</span>
+<span id="L17"><span class="lineNum">      17</span>                 :             : // external synchronization, but if any of the threads may call a</span>
+<span id="L18"><span class="lineNum">      18</span>                 :             : // non-const method, all threads accessing the same WriteBatch must use</span>
+<span id="L19"><span class="lineNum">      19</span>                 :             : // external synchronization.</span>
+<span id="L20"><span class="lineNum">      20</span>                 :             : </span>
+<span id="L21"><span class="lineNum">      21</span>                 :             : #ifndef STORAGE_LEVELDB_INCLUDE_WRITE_BATCH_H_</span>
+<span id="L22"><span class="lineNum">      22</span>                 :             : #define STORAGE_LEVELDB_INCLUDE_WRITE_BATCH_H_</span>
+<span id="L23"><span class="lineNum">      23</span>                 :             : </span>
+<span id="L24"><span class="lineNum">      24</span>                 :             : #include &lt;string&gt;</span>
+<span id="L25"><span class="lineNum">      25</span>                 :             : </span>
+<span id="L26"><span class="lineNum">      26</span>                 :             : #include &quot;leveldb/export.h&quot;</span>
+<span id="L27"><span class="lineNum">      27</span>                 :             : #include &quot;leveldb/status.h&quot;</span>
+<span id="L28"><span class="lineNum">      28</span>                 :             : </span>
+<span id="L29"><span class="lineNum">      29</span>                 :             : namespace leveldb {</span>
+<span id="L30"><span class="lineNum">      30</span>                 :             : </span>
+<span id="L31"><span class="lineNum">      31</span>                 :             : class Slice;</span>
+<span id="L32"><span class="lineNum">      32</span>                 :             : </span>
+<span id="L33"><span class="lineNum">      33</span>                 :             : class LEVELDB_EXPORT WriteBatch {</span>
+<span id="L34"><span class="lineNum">      34</span>                 :             :  public:</span>
+<span id="L35"><span class="lineNum">      35</span>         [<span class="tlaGBC" title="Branch 0 was taken 4119 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span>]:<span class="tlaGNC">        4119 :   class LEVELDB_EXPORT Handler {</span></span>
+<span id="L36"><span class="lineNum">      36</span>                 :             :    public:</span>
+<span id="L37"><span class="lineNum">      37</span>                 :             :     virtual ~Handler();</span>
+<span id="L38"><span class="lineNum">      38</span>                 :             :     virtual void Put(const Slice&amp; key, const Slice&amp; value) = 0;</span>
+<span id="L39"><span class="lineNum">      39</span>                 :             :     virtual void Delete(const Slice&amp; key) = 0;</span>
+<span id="L40"><span class="lineNum">      40</span>                 :             :   };</span>
+<span id="L41"><span class="lineNum">      41</span>                 :             : </span>
+<span id="L42"><span class="lineNum">      42</span>                 :             :   WriteBatch();</span>
+<span id="L43"><span class="lineNum">      43</span>                 :             : </span>
+<span id="L44"><span class="lineNum">      44</span>                 :             :   // Intentionally copyable.</span>
+<span id="L45"><span class="lineNum">      45</span>                 :             :   WriteBatch(const WriteBatch&amp;) = default;</span>
+<span id="L46"><span class="lineNum">      46</span>                 :             :   WriteBatch&amp; operator=(const WriteBatch&amp;) = default;</span>
+<span id="L47"><span class="lineNum">      47</span>                 :             : </span>
+<span id="L48"><span class="lineNum">      48</span>                 :             :   ~WriteBatch();</span>
+<span id="L49"><span class="lineNum">      49</span>                 :             : </span>
+<span id="L50"><span class="lineNum">      50</span>                 :             :   // Store the mapping &quot;key-&gt;value&quot; in the database.</span>
+<span id="L51"><span class="lineNum">      51</span>                 :             :   void Put(const Slice&amp; key, const Slice&amp; value);</span>
+<span id="L52"><span class="lineNum">      52</span>                 :             : </span>
+<span id="L53"><span class="lineNum">      53</span>                 :             :   // If the database contains a mapping for &quot;key&quot;, erase it.  Else do nothing.</span>
+<span id="L54"><span class="lineNum">      54</span>                 :             :   void Delete(const Slice&amp; key);</span>
+<span id="L55"><span class="lineNum">      55</span>                 :             : </span>
+<span id="L56"><span class="lineNum">      56</span>                 :             :   // Clear all updates buffered in this batch.</span>
+<span id="L57"><span class="lineNum">      57</span>                 :             :   void Clear();</span>
+<span id="L58"><span class="lineNum">      58</span>                 :             : </span>
+<span id="L59"><span class="lineNum">      59</span>                 :             :   // The size of the database changes caused by this batch.</span>
+<span id="L60"><span class="lineNum">      60</span>                 :             :   //</span>
+<span id="L61"><span class="lineNum">      61</span>                 :             :   // This number is tied to implementation details, and may change across</span>
+<span id="L62"><span class="lineNum">      62</span>                 :             :   // releases. It is intended for LevelDB usage metrics.</span>
+<span id="L63"><span class="lineNum">      63</span>                 :             :   size_t ApproximateSize() const;</span>
+<span id="L64"><span class="lineNum">      64</span>                 :             : </span>
+<span id="L65"><span class="lineNum">      65</span>                 :             :   // Copies the operations in &quot;source&quot; to this batch.</span>
+<span id="L66"><span class="lineNum">      66</span>                 :             :   //</span>
+<span id="L67"><span class="lineNum">      67</span>                 :             :   // This runs in O(source size) time. However, the constant factor is better</span>
+<span id="L68"><span class="lineNum">      68</span>                 :             :   // than calling Iterate() over the source batch with a Handler that replicates</span>
+<span id="L69"><span class="lineNum">      69</span>                 :             :   // the operations into this batch.</span>
+<span id="L70"><span class="lineNum">      70</span>                 :             :   void Append(const WriteBatch&amp; source);</span>
+<span id="L71"><span class="lineNum">      71</span>                 :             : </span>
+<span id="L72"><span class="lineNum">      72</span>                 :             :   // Support for iterating over the contents of a batch.</span>
+<span id="L73"><span class="lineNum">      73</span>                 :             :   Status Iterate(Handler* handler) const;</span>
+<span id="L74"><span class="lineNum">      74</span>                 :             : </span>
+<span id="L75"><span class="lineNum">      75</span>                 :             :  private:</span>
+<span id="L76"><span class="lineNum">      76</span>                 :             :   friend class WriteBatchInternal;</span>
+<span id="L77"><span class="lineNum">      77</span>                 :             : </span>
+<span id="L78"><span class="lineNum">      78</span>                 :             :   std::string rep_;  // See comment in write_batch.cc for the format of rep_</span>
+<span id="L79"><span class="lineNum">      79</span>                 :             : };</span>
+<span id="L80"><span class="lineNum">      80</span>                 :             : </span>
+<span id="L81"><span class="lineNum">      81</span>                 :             : }  // namespace leveldb</span>
+<span id="L82"><span class="lineNum">      82</span>                 :             : </span>
+<span id="L83"><span class="lineNum">      83</span>                 :             : #endif  // STORAGE_LEVELDB_INCLUDE_WRITE_BATCH_H_</span>
+        </pre>
+              </td>
+            </tr>
+          </table>
+          <br>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="ruler"><img src="../../../../glass.png" width=3 height=3 alt=""></td></tr>
+            <tr><td class="versionInfo">Generated by: <a href="https://github.com//linux-test-project/lcov" target="_parent">LCOV version 2.0-1</a></td></tr>
+          </table>
+          <br>
+
+</body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - total_coverage.info - src/leveldb/table/iterator_wrapper.h</title>
+  <link rel="stylesheet" type="text/css" href="../../../gcov.css">
+</head>
+
+<body>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="title">LCOV - code coverage report</td></tr>
+            <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+
+            <tr>
+              <td width="100%">
+                <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="10%" class="headerValue"><a href="../../../index.html" title="Click to go to top-level">top level</a> - <a href="index.html" title="Click to go to directory src/leveldb/table">src/leveldb/table</a> - iterator_wrapper.h<span style="font-size: 80%;"> (source / <a href="iterator_wrapper.h.func-c.html" title="Click to go to function table">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="5%"></td>
+            <td width="5%" class="headerCovTableHead">Coverage</td>
+            <td width="5%" class="headerCovTableHead" title="Covered + Uncovered code">Total</td>
+            <td width="5%" class="headerCovTableHead" title="Exercised code only">Hit</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">total_coverage.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntryMed">80.4&nbsp;%</td>
+            <td class="headerCovTableEntry">51</td>
+            <td class="headerCovTableEntry">41</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test Date:</td>
+            <td class="headerValue">2026-09-05 06:08:39</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntryMed">81.8&nbsp;%</td>
+            <td class="headerCovTableEntry">11</td>
+            <td class="headerCovTableEntry">9</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntryLo">56.1&nbsp;%</td>
+            <td class="headerCovTableEntry">66</td>
+            <td class="headerCovTableEntry">37</td>
+          </tr>
+                  <tr><td><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+          </table>
+
+          <table cellpadding=0 cellspacing=0 border=0>
+            <tr>
+              <td><br></td>
+            </tr>
+            <tr>
+              <td>
+<pre class="sourceHeading">             Branch data     Line data    Source code</pre>
+<pre class="source">
+<span id="L1"><span class="lineNum">       1</span>                 :             : // Copyright (c) 2011 The LevelDB Authors. All rights reserved.</span>
+<span id="L2"><span class="lineNum">       2</span>                 :             : // Use of this source code is governed by a BSD-style license that can be</span>
+<span id="L3"><span class="lineNum">       3</span>                 :             : // found in the LICENSE file. See the AUTHORS file for names of contributors.</span>
+<span id="L4"><span class="lineNum">       4</span>                 :             : </span>
+<span id="L5"><span class="lineNum">       5</span>                 :             : #ifndef STORAGE_LEVELDB_TABLE_ITERATOR_WRAPPER_H_</span>
+<span id="L6"><span class="lineNum">       6</span>                 :             : #define STORAGE_LEVELDB_TABLE_ITERATOR_WRAPPER_H_</span>
+<span id="L7"><span class="lineNum">       7</span>                 :             : </span>
+<span id="L8"><span class="lineNum">       8</span>                 :             : #include &quot;leveldb/iterator.h&quot;</span>
+<span id="L9"><span class="lineNum">       9</span>                 :             : #include &quot;leveldb/slice.h&quot;</span>
+<span id="L10"><span class="lineNum">      10</span>                 :             : </span>
+<span id="L11"><span class="lineNum">      11</span>                 :             : namespace leveldb {</span>
+<span id="L12"><span class="lineNum">      12</span>                 :             : </span>
+<span id="L13"><span class="lineNum">      13</span>                 :             : // A internal wrapper class with an interface similar to Iterator that</span>
+<span id="L14"><span class="lineNum">      14</span>                 :             : // caches the valid() and key() results for an underlying iterator.</span>
+<span id="L15"><span class="lineNum">      15</span>                 :             : // This can help avoid virtual function calls and also gives better</span>
+<span id="L16"><span class="lineNum">      16</span>                 :             : // cache locality.</span>
+<span id="L17"><span class="lineNum">      17</span>                 :             : class IteratorWrapper {</span>
+<span id="L18"><span class="lineNum">      18</span>                 :             :  public:</span>
+<span id="L19"><span class="lineNum">      19</span>                 :<span class="tlaGNC">        9126 :   IteratorWrapper() : iter_(nullptr), valid_(false) {}</span></span>
+<span id="L20"><span class="lineNum">      20</span>   [<span class="tlaGBC" title="Branch 0 was taken 9400 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span><span class="tlaGBC" title="Branch 2 was taken 9400 times"> + </span><span class="tlaUNC" title="Branch 3 was not taken"> - </span>]:<span class="tlaGNC">        9400 :   explicit IteratorWrapper(Iterator* iter) : iter_(nullptr) { Set(iter); }</span></span>
+<span id="L21"><span class="lineNum">      21</span>         [<span class="tlaGBC" title="Branch 0 was taken 20529 times"> + </span><span class="tlaGBC" title="Branch 1 was taken 7397 times"> + </span>]:<span class="tlaGNC">       27926 :   ~IteratorWrapper() { delete iter_; }</span></span>
+<span id="L22"><span class="lineNum">      22</span>   [<span class="tlaGBC" title="Branch 0 was taken 10162 times"> + </span><span class="tlaGBC" title="Branch 1 was taken 5021 times"> + </span><span class="tlaGBC" title="Branch 2 was taken 13180 times"> + </span><span class="tlaGBC" title="Branch 3 was taken 12175 times"> + </span> :<span class="tlaGNC">      690137 :   Iterator* iter() const { return iter_; }</span></span>
+<span class="lineNum">        </span> <span class="tlaUNC" title="Branch 4 was not taken"> - </span><span class="tlaUNC" title="Branch 5 was not taken"> - </span><span class="tlaUNC" title="Branch 6 was not taken"> - </span><span class="tlaUNC" title="Branch 7 was not taken"> - </span><span class="tlaGBC" title="Branch 8 was taken 10162 times"> + </span> 
+<span class="lineNum">        </span> <span class="tlaGBC" title="Branch 9 was taken 3018 times"> + </span><span class="tlaGBC" title="Branch 10 was taken 622641 times"> + </span><span class="tlaGBC" title="Branch 11 was taken 5086 times"> + </span><span class="tlaUNC" title="Branch 12 was not taken"> - </span><span class="tlaUNC" title="Branch 13 was not taken"> - </span> 
+<span class="lineNum">        </span> <span class="tlaGBC" title="Branch 14 was taken 1154 times"> + </span><span class="tlaUNC" title="Branch 15 was not taken"> - </span><span class="tlaGBC" title="Branch 16 was taken 3867 times"> + </span><span class="tlaGBC" title="Branch 17 was taken 2068 times"> + </span><span class="tlaGBC" title="Branch 18 was taken 49 times"> + </span> 
+<span class="lineNum">        </span>             <span class="tlaGBC" title="Branch 19 was taken 4572 times"> + </span>]
+<span id="L23"><span class="lineNum">      23</span>                 :             : </span>
+<span id="L24"><span class="lineNum">      24</span>                 :             :   // Takes ownership of &quot;iter&quot; and will delete it when destroyed, or</span>
+<span id="L25"><span class="lineNum">      25</span>                 :             :   // when Set() is invoked again.</span>
+<span id="L26"><span class="lineNum">      26</span>                 :<span class="tlaGNC">       53281 :   void Set(Iterator* iter) {</span></span>
+<span id="L27"><span class="lineNum">      27</span>         [<span class="tlaGBC" title="Branch 0 was taken 13180 times"> + </span><span class="tlaGBC" title="Branch 1 was taken 40101 times"> + </span>]:<span class="tlaGNC">       53281 :     delete iter_;</span></span>
+<span id="L28"><span class="lineNum">      28</span>                 :<span class="tlaGNC">       53281 :     iter_ = iter;</span></span>
+<span id="L29"><span class="lineNum">      29</span>         [<span class="tlaGBC" title="Branch 0 was taken 19572 times"> + </span><span class="tlaGBC" title="Branch 1 was taken 33709 times"> + </span>]:<span class="tlaGNC">       53281 :     if (iter_ == nullptr) {</span></span>
+<span id="L30"><span class="lineNum">      30</span>                 :<span class="tlaGNC">       19572 :       valid_ = false;</span></span>
+<span id="L31"><span class="lineNum">      31</span>                 :             :     } else {</span>
+<span id="L32"><span class="lineNum">      32</span>                 :<span class="tlaGNC">       33709 :       Update();</span></span>
+<span id="L33"><span class="lineNum">      33</span>                 :             :     }</span>
+<span id="L34"><span class="lineNum">      34</span>                 :<span class="tlaGNC">       53281 :   }</span></span>
+<span id="L35"><span class="lineNum">      35</span>                 :             : </span>
+<span id="L36"><span class="lineNum">      36</span>                 :             :   // Iterator interface methods</span>
+<span id="L37"><span class="lineNum">      37</span>   [<span class="tlaGBC" title="Branch 0 was taken 5086 times"> + </span><span class="tlaGBC" title="Branch 1 was taken 15183 times"> + </span><span class="tlaUNC" title="Branch 2 was not taken"> - </span><span class="tlaUNC" title="Branch 3 was not taken"> - </span> :<span class="tlaGNC">     2519278 :   bool Valid() const { return valid_; }</span></span>
+<span class="lineNum">        </span> <span class="tlaUNC" title="Branch 4 was not taken"> - </span><span class="tlaUNC" title="Branch 5 was not taken"> - </span><span class="tlaGBC" title="Branch 6 was taken 13180 times"> + </span><span class="tlaGBC" title="Branch 7 was taken 609461 times"> + </span><span class="tlaGBC" title="Branch 8 was taken 5086 times"> + </span> 
+<span class="lineNum">        </span>  <span class="tlaGBC" title="Branch 9 was taken 13180 times"> + </span>][<span class="tlaUNC" title="Branch 0 was not taken"> - </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span><span class="tlaGBC" title="Branch 2 was taken 1614662 times"> + </span> 
+<span class="lineNum">        </span>    <span class="tlaGBC" title="Branch 3 was taken 256620 times"> + </span><span class="tlaUNC" title="Branch 4 was not taken"> - </span><span class="tlaUNC" title="Branch 5 was not taken"> - </span><span class="tlaUNC" title="Branch 6 was not taken"> - </span> 
+<span class="lineNum">        </span>             <span class="tlaUNC" title="Branch 7 was not taken"> - </span>]
+<span id="L38"><span class="lineNum">      38</span>                 :<span class="tlaGNC">     3993224 :   Slice key() const {</span></span>
+<span id="L39"><span class="lineNum">      39</span>         [<span class="tlaUNC" title="Branch 0 was not taken"> - </span><span class="tlaGBC" title="Branch 1 was taken 3993224 times"> + </span>]:<span class="tlaGNC">     3993224 :     assert(Valid());</span></span>
+<span id="L40"><span class="lineNum">      40</span>                 :<span class="tlaGNC">     3993224 :     return key_;</span></span>
+<span id="L41"><span class="lineNum">      41</span>                 :             :   }</span>
+<span id="L42"><span class="lineNum">      42</span>                 :<span class="tlaGNC">     2009388 :   Slice value() const {</span></span>
+<span id="L43"><span class="lineNum">      43</span>         [<span class="tlaUNC" title="Branch 0 was not taken"> - </span><span class="tlaGBC" title="Branch 1 was taken 2009388 times"> + </span>]:<span class="tlaGNC">     2009388 :     assert(Valid());</span></span>
+<span id="L44"><span class="lineNum">      44</span>                 :<span class="tlaGNC">     2009388 :     return iter_-&gt;value();</span></span>
+<span id="L45"><span class="lineNum">      45</span>                 :             :   }</span>
+<span id="L46"><span class="lineNum">      46</span>                 :             :   // Methods below require iter() != nullptr</span>
+<span id="L47"><span class="lineNum">      47</span>                 :<span class="tlaGNC">       20041 :   Status status() const {</span></span>
+<span id="L48"><span class="lineNum">      48</span>         [<span class="tlaUNC" title="Branch 0 was not taken"> - </span><span class="tlaGBC" title="Branch 1 was taken 20041 times"> + </span>]:<span class="tlaGNC">       20041 :     assert(iter_);</span></span>
+<span id="L49"><span class="lineNum">      49</span>                 :<span class="tlaGNC">       20041 :     return iter_-&gt;status();</span></span>
+<span id="L50"><span class="lineNum">      50</span>                 :             :   }</span>
+<span id="L51"><span class="lineNum">      51</span>                 :<span class="tlaGNC">     1224398 :   void Next() {</span></span>
+<span id="L52"><span class="lineNum">      52</span>         [<span class="tlaUNC" title="Branch 0 was not taken"> - </span><span class="tlaGBC" title="Branch 1 was taken 1224398 times"> + </span>]:<span class="tlaGNC">     1224398 :     assert(iter_);</span></span>
+<span id="L53"><span class="lineNum">      53</span>                 :<span class="tlaGNC">     1224398 :     iter_-&gt;Next();</span></span>
+<span id="L54"><span class="lineNum">      54</span>                 :<span class="tlaGNC">     1224398 :     Update();</span></span>
+<span id="L55"><span class="lineNum">      55</span>                 :<span class="tlaGNC">     1224398 :   }</span></span>
+<span id="L56"><span class="lineNum">      56</span>                 :<span class="tlaUNC">           0 :   void Prev() {</span></span>
+<span id="L57"><span class="lineNum">      57</span>         [<span class="tlaUNC" title="Branch 0 was not executed"> # </span><span class="tlaUNC" title="Branch 1 was not executed"> # </span>]:<span class="tlaUNC">           0 :     assert(iter_);</span></span>
+<span id="L58"><span class="lineNum">      58</span>                 :<span class="tlaUNC">           0 :     iter_-&gt;Prev();</span></span>
+<span id="L59"><span class="lineNum">      59</span>                 :<span class="tlaUNC">           0 :     Update();</span></span>
+<span id="L60"><span class="lineNum">      60</span>                 :<span class="tlaUNC">           0 :   }</span></span>
+<span id="L61"><span class="lineNum">      61</span>                 :<span class="tlaGNC">       17869 :   void Seek(const Slice&amp; k) {</span></span>
+<span id="L62"><span class="lineNum">      62</span>         [<span class="tlaUNC" title="Branch 0 was not taken"> - </span><span class="tlaGBC" title="Branch 1 was taken 17869 times"> + </span>]:<span class="tlaGNC">       17869 :     assert(iter_);</span></span>
+<span id="L63"><span class="lineNum">      63</span>                 :<span class="tlaGNC">       17869 :     iter_-&gt;Seek(k);</span></span>
+<span id="L64"><span class="lineNum">      64</span>                 :<span class="tlaGNC">       17869 :     Update();</span></span>
+<span id="L65"><span class="lineNum">      65</span>                 :<span class="tlaGNC">       17869 :   }</span></span>
+<span id="L66"><span class="lineNum">      66</span>                 :<span class="tlaGNC">       13529 :   void SeekToFirst() {</span></span>
+<span id="L67"><span class="lineNum">      67</span>         [<span class="tlaUNC" title="Branch 0 was not taken"> - </span><span class="tlaGBC" title="Branch 1 was taken 13529 times"> + </span>]:<span class="tlaGNC">       13529 :     assert(iter_);</span></span>
+<span id="L68"><span class="lineNum">      68</span>                 :<span class="tlaGNC">       13529 :     iter_-&gt;SeekToFirst();</span></span>
+<span id="L69"><span class="lineNum">      69</span>                 :<span class="tlaGNC">       13529 :     Update();</span></span>
+<span id="L70"><span class="lineNum">      70</span>                 :<span class="tlaGNC">       13529 :   }</span></span>
+<span id="L71"><span class="lineNum">      71</span>                 :<span class="tlaUNC">           0 :   void SeekToLast() {</span></span>
+<span id="L72"><span class="lineNum">      72</span>         [<span class="tlaUNC" title="Branch 0 was not executed"> # </span><span class="tlaUNC" title="Branch 1 was not executed"> # </span>]:<span class="tlaUNC">           0 :     assert(iter_);</span></span>
+<span id="L73"><span class="lineNum">      73</span>                 :<span class="tlaUNC">           0 :     iter_-&gt;SeekToLast();</span></span>
+<span id="L74"><span class="lineNum">      74</span>                 :<span class="tlaUNC">           0 :     Update();</span></span>
+<span id="L75"><span class="lineNum">      75</span>                 :<span class="tlaUNC">           0 :   }</span></span>
+<span id="L76"><span class="lineNum">      76</span>                 :             : </span>
+<span id="L77"><span class="lineNum">      77</span>                 :             :  private:</span>
+<span id="L78"><span class="lineNum">      78</span>                 :<span class="tlaGNC">     1289505 :   void Update() {</span></span>
+<span id="L79"><span class="lineNum">      79</span>                 :<span class="tlaGNC">     1289505 :     valid_ = iter_-&gt;Valid();</span></span>
+<span id="L80"><span class="lineNum">      80</span>         [<span class="tlaGBC" title="Branch 0 was taken 1230219 times"> + </span><span class="tlaGBC" title="Branch 1 was taken 59286 times"> + </span>]:<span class="tlaGNC">     1289505 :     if (valid_) {</span></span>
+<span id="L81"><span class="lineNum">      81</span>                 :<span class="tlaGNC">     1230219 :       key_ = iter_-&gt;key();</span></span>
+<span id="L82"><span class="lineNum">      82</span>                 :             :     }</span>
+<span id="L83"><span class="lineNum">      83</span>                 :<span class="tlaGNC">     1289505 :   }</span></span>
+<span id="L84"><span class="lineNum">      84</span>                 :             : </span>
+<span id="L85"><span class="lineNum">      85</span>                 :             :   Iterator* iter_;</span>
+<span id="L86"><span class="lineNum">      86</span>                 :             :   bool valid_;</span>
+<span id="L87"><span class="lineNum">      87</span>                 :             :   Slice key_;</span>
+<span id="L88"><span class="lineNum">      88</span>                 :             : };</span>
+<span id="L89"><span class="lineNum">      89</span>                 :             : </span>
+<span id="L90"><span class="lineNum">      90</span>                 :             : }  // namespace leveldb</span>
+<span id="L91"><span class="lineNum">      91</span>                 :             : </span>
+<span id="L92"><span class="lineNum">      92</span>                 :             : #endif  // STORAGE_LEVELDB_TABLE_ITERATOR_WRAPPER_H_</span>
+        </pre>
+              </td>
+            </tr>
+          </table>
+          <br>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+            <tr><td class="versionInfo">Generated by: <a href="https://github.com//linux-test-project/lcov" target="_parent">LCOV version 2.0-1</a></td></tr>
+          </table>
+          <br>
+
+</body>
+</html>
