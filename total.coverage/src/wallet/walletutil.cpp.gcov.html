@@ -1,0 +1,307 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - total_coverage.info - src/wallet/walletutil.cpp</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="title">LCOV - code coverage report</td></tr>
+            <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+            <tr>
+              <td width="100%">
+                <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="10%" class="headerValue"><a href="../../index.html" title="Click to go to top-level">top level</a> - <a href="index.html" title="Click to go to directory src/wallet">src/wallet</a> - walletutil.cpp<span style="font-size: 80%;"> (source / <a href="walletutil.cpp.func-c.html" title="Click to go to function table">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="5%"></td>
+            <td width="5%" class="headerCovTableHead">Coverage</td>
+            <td width="5%" class="headerCovTableHead" title="Covered + Uncovered code">Total</td>
+            <td width="5%" class="headerCovTableHead" title="Exercised code only">Hit</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">total_coverage.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntryHi">96.2&nbsp;%</td>
+            <td class="headerCovTableEntry">105</td>
+            <td class="headerCovTableEntry">101</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test Date:</td>
+            <td class="headerValue">2026-11-27 06:15:43</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntryHi">100.0&nbsp;%</td>
+            <td class="headerCovTableEntry">11</td>
+            <td class="headerCovTableEntry">11</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="headerItem">Branches:</td>
+            <td class="headerCovTableEntryLo">64.0&nbsp;%</td>
+            <td class="headerCovTableEntry">242</td>
+            <td class="headerCovTableEntry">155</td>
+          </tr>
+                  <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+          </table>
+
+          <table cellpadding=0 cellspacing=0 border=0>
+            <tr>
+              <td><br></td>
+            </tr>
+            <tr>
+              <td>
+<pre class="sourceHeading">             Branch data     Line data    Source code</pre>
+<pre class="source">
+<span id="L1"><span class="lineNum">       1</span>                 :             : // Copyright (c) 2017-present The Bitcoin Core developers</span>
+<span id="L2"><span class="lineNum">       2</span>                 :             : // Distributed under the MIT software license, see the accompanying</span>
+<span id="L3"><span class="lineNum">       3</span>                 :             : // file COPYING or http://www.opensource.org/licenses/mit-license.php.</span>
+<span id="L4"><span class="lineNum">       4</span>                 :             : </span>
+<span id="L5"><span class="lineNum">       5</span>                 :             : #include &lt;wallet/walletutil.h&gt;</span>
+<span id="L6"><span class="lineNum">       6</span>                 :             : </span>
+<span id="L7"><span class="lineNum">       7</span>                 :             : #include &lt;chainparams.h&gt;</span>
+<span id="L8"><span class="lineNum">       8</span>                 :             : #include &lt;common/args.h&gt;</span>
+<span id="L9"><span class="lineNum">       9</span>                 :             : #include &lt;common/settings.h&gt;</span>
+<span id="L10"><span class="lineNum">      10</span>                 :             : #include &lt;key_io.h&gt;</span>
+<span id="L11"><span class="lineNum">      11</span>                 :             : #include &lt;util/check.h&gt;</span>
+<span id="L12"><span class="lineNum">      12</span>                 :             : #include &lt;univalue.h&gt;</span>
+<span id="L13"><span class="lineNum">      13</span>                 :             : #include &lt;util/log.h&gt;</span>
+<span id="L14"><span class="lineNum">      14</span>                 :             : </span>
+<span id="L15"><span class="lineNum">      15</span>                 :             : namespace wallet {</span>
+<span id="L16"><span class="lineNum">      16</span>                 :<span class="tlaGNC">        2603 : fs::path GetWalletDir()</span></span>
+<span id="L17"><span class="lineNum">      17</span>                 :             : {</span>
+<span id="L18"><span class="lineNum">      18</span>                 :<span class="tlaGNC">        2603 :     fs::path path;</span></span>
+<span id="L19"><span class="lineNum">      19</span>                 :             : </span>
+<span id="L20"><span class="lineNum">      20</span>   [<span class="tlaGBC" title="Branch 0 was taken 2603 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span><span class="tlaGBC" title="Branch 2 was taken 2603 times"> + </span><span class="tlaUNC" title="Branch 3 was not taken"> - </span> :<span class="tlaGNC">        2603 :     if (gArgs.IsArgSet(&quot;-walletdir&quot;)) {</span></span>
+<span class="lineNum">        </span>          <span class="tlaGBC" title="Branch 4 was taken 19 times"> + </span><span class="tlaGBC" title="Branch 5 was taken 2584 times"> + </span>]
+<span id="L21"><span class="lineNum">      21</span>   [<span class="tlaGBC" title="Branch 0 was taken 19 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span><span class="tlaGBC" title="Branch 2 was taken 19 times"> + </span><span class="tlaUNC" title="Branch 3 was not taken"> - </span>]:<span class="tlaGNC">          57 :         path = gArgs.GetPathArg(&quot;-walletdir&quot;);</span></span>
+<span id="L22"><span class="lineNum">      22</span>   [<span class="tlaGBC" title="Branch 0 was taken 19 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span><span class="tlaUNC" title="Branch 2 was not taken"> - </span><span class="tlaGBC" title="Branch 3 was taken 19 times"> + </span>]:<span class="tlaGNC">          19 :         if (!fs::is_directory(path)) {</span></span>
+<span id="L23"><span class="lineNum">      23</span>                 :             :             // If the path specified doesn't exist, we return the deliberately</span>
+<span id="L24"><span class="lineNum">      24</span>                 :             :             // invalid empty string.</span>
+<span id="L25"><span class="lineNum">      25</span>         [<span class="tlaUNC" title="Branch 0 was not executed"> # </span><span class="tlaUNC" title="Branch 1 was not executed"> # </span>]:<span class="tlaUNC">           0 :             path = &quot;&quot;;</span></span>
+<span id="L26"><span class="lineNum">      26</span>                 :             :         }</span>
+<span id="L27"><span class="lineNum">      27</span>                 :             :     } else {</span>
+<span id="L28"><span class="lineNum">      28</span>         [<span class="tlaGBC" title="Branch 0 was taken 2584 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span>]:<span class="tlaGNC">        5168 :         path = gArgs.GetDataDirNet();</span></span>
+<span id="L29"><span class="lineNum">      29</span>                 :             :         // If a wallets directory exists, use that, otherwise default to GetDataDir</span>
+<span id="L30"><span class="lineNum">      30</span>   [<span class="tlaGBC" title="Branch 0 was taken 2584 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span><span class="tlaGBC" title="Branch 2 was taken 2584 times"> + </span><span class="tlaUNC" title="Branch 3 was not taken"> - </span> :<span class="tlaGNC">       10336 :         if (fs::is_directory(path / &quot;wallets&quot;)) {</span></span>
+<span class="lineNum">        </span>    <span class="tlaGBC" title="Branch 4 was taken 2584 times"> + </span><span class="tlaUNC" title="Branch 5 was not taken"> - </span><span class="tlaGBC" title="Branch 6 was taken 1945 times"> + </span><span class="tlaGBC" title="Branch 7 was taken 639 times"> + </span>]
+<span id="L31"><span class="lineNum">      31</span>         [<span class="tlaGBC" title="Branch 0 was taken 1945 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span>]:<span class="tlaGNC">        1945 :             path /= &quot;wallets&quot;;</span></span>
+<span id="L32"><span class="lineNum">      32</span>                 :             :         }</span>
+<span id="L33"><span class="lineNum">      33</span>                 :             :     }</span>
+<span id="L34"><span class="lineNum">      34</span>                 :             : </span>
+<span id="L35"><span class="lineNum">      35</span>                 :<span class="tlaGNC">        2603 :     return path;</span></span>
+<span id="L36"><span class="lineNum">      36</span>                 :<span class="tlaUNC">           0 : }</span></span>
+<span id="L37"><span class="lineNum">      37</span>                 :             : </span>
+<span id="L38"><span class="lineNum">      38</span>                 :<span class="tlaGNC">        1684 : util::Result&lt;fs::path&gt; GetWalletPath(const std::string&amp; name)</span></span>
+<span id="L39"><span class="lineNum">      39</span>                 :             : {</span>
+<span id="L40"><span class="lineNum">      40</span>                 :<span class="tlaGNC">        1684 :     const fs::path name_path = fs::PathFromString(name);</span></span>
+<span id="L41"><span class="lineNum">      41</span>                 :             : </span>
+<span id="L42"><span class="lineNum">      42</span>                 :             :     // 'name' must be a normalized path, i.e. no . or .. except at the root</span>
+<span id="L43"><span class="lineNum">      43</span>   [<span class="tlaGBC" title="Branch 0 was taken 1684 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span><span class="tlaGBC" title="Branch 2 was taken 16 times"> + </span><span class="tlaGBC" title="Branch 3 was taken 1668 times"> + </span>]:<span class="tlaGNC">        5052 :     if (name_path != name_path.lexically_normal()) {</span></span>
+<span id="L44"><span class="lineNum">      44</span>   [<span class="tlaGBC" title="Branch 0 was taken 16 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span><span class="tlaGBC" title="Branch 2 was taken 16 times"> + </span><span class="tlaUNC" title="Branch 3 was not taken"> - </span>]:<span class="tlaGNC">          48 :         return util::Error{Untranslated(&quot;Wallet name given as a path must be normalized&quot;)};</span></span>
+<span id="L45"><span class="lineNum">      45</span>                 :             :     }</span>
+<span id="L46"><span class="lineNum">      46</span>                 :             : </span>
+<span id="L47"><span class="lineNum">      47</span>                 :             :     // 'name' cannot begin with ./ or ../</span>
+<span id="L48"><span class="lineNum">      48</span>   [<span class="tlaGBC" title="Branch 0 was taken 1333 times"> + </span><span class="tlaGBC" title="Branch 1 was taken 335 times"> + </span><span class="tlaGBC" title="Branch 2 was taken 1333 times"> + </span><span class="tlaUNC" title="Branch 3 was not taken"> - </span> :<span class="tlaGNC">        7106 :     if (!name_path.empty() &amp;&amp; (*name_path.begin() == fs::PathFromString(&quot;.&quot;) || *name_path.begin() == fs::PathFromString(&quot;..&quot;))) {</span></span>
+<span class="lineNum">        </span> <span class="tlaGBC" title="Branch 4 was taken 1333 times"> + </span><span class="tlaUNC" title="Branch 5 was not taken"> - </span><span class="tlaGBC" title="Branch 6 was taken 55 times"> + </span><span class="tlaGBC" title="Branch 7 was taken 1278 times"> + </span><span class="tlaGBC" title="Branch 8 was taken 1331 times"> + </span> 
+<span class="lineNum">        </span> <span class="tlaGBC" title="Branch 9 was taken 2 times"> + </span><span class="tlaGBC" title="Branch 10 was taken 1331 times"> + </span><span class="tlaUNC" title="Branch 11 was not taken"> - </span><span class="tlaGBC" title="Branch 12 was taken 1331 times"> + </span><span class="tlaUNC" title="Branch 13 was not taken"> - </span> 
+<span class="lineNum">        </span> <span class="tlaGBC" title="Branch 14 was taken 55 times"> + </span><span class="tlaGBC" title="Branch 15 was taken 1276 times"> + </span><span class="tlaGBC" title="Branch 16 was taken 4 times"> + </span><span class="tlaGBC" title="Branch 17 was taken 1327 times"> + </span><span class="tlaGBC" title="Branch 18 was taken 1331 times"> + </span> 
+<span class="lineNum">        </span> <span class="tlaGBC" title="Branch 19 was taken 337 times"> + </span><span class="tlaGBC" title="Branch 20 was taken 1333 times"> + </span><span class="tlaGBC" title="Branch 21 was taken 335 times"> + </span><span class="tlaGBC" title="Branch 22 was taken 1333 times"> + </span><span class="tlaGBC" title="Branch 23 was taken 335 times"> + </span> 
+<span class="lineNum">        </span> <span class="tlaGBC" title="Branch 24 was taken 6 times"> + </span><span class="tlaGBC" title="Branch 25 was taken 1662 times"> + </span><span class="tlaUNC" title="Branch 26 was not taken"> - </span><span class="tlaUNC" title="Branch 27 was not taken"> - </span><span class="tlaUNC" title="Branch 28 was not taken"> - </span> 
+<span class="lineNum">        </span>       <span class="tlaUNC" title="Branch 29 was not taken"> - </span><span class="tlaUNC" title="Branch 30 was not taken"> - </span><span class="tlaUNC" title="Branch 31 was not taken"> - </span>]
+<span id="L49"><span class="lineNum">      49</span>   [<span class="tlaGBC" title="Branch 0 was taken 6 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span><span class="tlaGBC" title="Branch 2 was taken 6 times"> + </span><span class="tlaUNC" title="Branch 3 was not taken"> - </span>]:<span class="tlaGNC">          18 :         return util::Error{Untranslated(&quot;Wallet name given as a relative path cannot begin with ./ or ../, for wallets not in the walletdir, please use an absolute path.&quot;)};</span></span>
+<span id="L50"><span class="lineNum">      50</span>                 :             :     }</span>
+<span id="L51"><span class="lineNum">      51</span>                 :             : </span>
+<span id="L52"><span class="lineNum">      52</span>                 :             :     // Disallow path at root</span>
+<span id="L53"><span class="lineNum">      53</span>   [<span class="tlaGBC" title="Branch 0 was taken 35 times"> + </span><span class="tlaGBC" title="Branch 1 was taken 1627 times"> + </span><span class="tlaGBC" title="Branch 2 was taken 35 times"> + </span><span class="tlaUNC" title="Branch 3 was not taken"> - </span> :<span class="tlaGNC">        1697 :     if (name_path.has_root_path() &amp;&amp; name_path.root_path() == name_path) {</span></span>
+<span class="lineNum">        </span>    <span class="tlaGBC" title="Branch 4 was taken 2 times"> + </span><span class="tlaGBC" title="Branch 5 was taken 33 times"> + </span><span class="tlaGBC" title="Branch 6 was taken 2 times"> + </span><span class="tlaGBC" title="Branch 7 was taken 1660 times"> + </span>]
+<span id="L54"><span class="lineNum">      54</span>   [<span class="tlaGBC" title="Branch 0 was taken 2 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span><span class="tlaGBC" title="Branch 2 was taken 2 times"> + </span><span class="tlaUNC" title="Branch 3 was not taken"> - </span>]:<span class="tlaGNC">           6 :         return util::Error{Untranslated(&quot;Wallet name cannot be the root path&quot;)};</span></span>
+<span id="L55"><span class="lineNum">      55</span>                 :             :     }</span>
+<span id="L56"><span class="lineNum">      56</span>                 :             : </span>
+<span id="L57"><span class="lineNum">      57</span>                 :             :     // Do some checking on wallet path. It should be either a:</span>
+<span id="L58"><span class="lineNum">      58</span>                 :             :     //</span>
+<span id="L59"><span class="lineNum">      59</span>                 :             :     // 1. Path where a directory can be created.</span>
+<span id="L60"><span class="lineNum">      60</span>                 :             :     // 2. Path to an existing directory.</span>
+<span id="L61"><span class="lineNum">      61</span>                 :             :     // 3. Path to a symlink to a directory.</span>
+<span id="L62"><span class="lineNum">      62</span>                 :             :     // 4. For backwards compatibility, the name of a data file in -walletdir.</span>
+<span id="L63"><span class="lineNum">      63</span>   [<span class="tlaGBC" title="Branch 0 was taken 1660 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span><span class="tlaGBC" title="Branch 2 was taken 1660 times"> + </span><span class="tlaUNC" title="Branch 3 was not taken"> - </span>]:<span class="tlaGNC">        1660 :     const fs::path wallet_path = fsbridge::AbsPathJoin(GetWalletDir(), name_path);</span></span>
+<span id="L64"><span class="lineNum">      64</span>         [<span class="tlaGBC" title="Branch 0 was taken 1660 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span>]:<span class="tlaGNC">        1660 :     fs::file_type path_type = fs::symlink_status(wallet_path).type();</span></span>
+<span id="L65"><span class="lineNum">      65</span>   [<span class="tlaGBC" title="Branch 0 was taken 18 times"> + </span><span class="tlaGBC" title="Branch 1 was taken 1642 times"> + </span><span class="tlaGBC" title="Branch 2 was taken 16 times"> + </span><span class="tlaGBC" title="Branch 3 was taken 2 times"> + </span> :<span class="tlaGNC">        1678 :     if (!(path_type == fs::file_type::not_found || path_type == fs::file_type::directory ||</span></span>
+<span class="lineNum">        </span>    <span class="tlaGBC" title="Branch 4 was taken 2 times"> + </span><span class="tlaGBC" title="Branch 5 was taken 4 times"> + </span><span class="tlaGBC" title="Branch 6 was taken 4 times"> + </span><span class="tlaGBC" title="Branch 7 was taken 1656 times"> + </span>]
+<span id="L66"><span class="lineNum">      66</span>   [<span class="tlaGBC" title="Branch 0 was taken 16 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span><span class="tlaGBC" title="Branch 2 was taken 4 times"> + </span><span class="tlaGBC" title="Branch 3 was taken 12 times"> + </span>]:<span class="tlaGNC">          16 :           (path_type == fs::file_type::symlink &amp;&amp; fs::is_directory(wallet_path)) ||</span></span>
+<span id="L67"><span class="lineNum">      67</span>   [<span class="tlaGBC" title="Branch 0 was taken 2 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span><span class="tlaUNC" title="Branch 2 was not taken"> - </span><span class="tlaGBC" title="Branch 3 was taken 2 times"> + </span>]:<span class="tlaGNC">           4 :           (path_type == fs::file_type::regular &amp;&amp; name_path.filename() == name_path))) {</span></span>
+<span id="L68"><span class="lineNum">      68</span>   [<span class="tlaGBC" title="Branch 0 was taken 4 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span><span class="tlaGBC" title="Branch 2 was taken 4 times"> + </span><span class="tlaUNC" title="Branch 3 was not taken"> - </span>]:<span class="tlaGNC">           8 :         return util::Error{Untranslated(strprintf(</span></span>
+<span id="L69"><span class="lineNum">      69</span>                 :             :               &quot;Invalid -wallet path '%s'. -wallet path should point to a directory where wallet.dat and &quot;</span>
+<span id="L70"><span class="lineNum">      70</span>                 :             :               &quot;database/log.?????????? files can be stored, a location where such a directory could be created, &quot;</span>
+<span id="L71"><span class="lineNum">      71</span>                 :             :               &quot;or (for backwards compatibility) the name of an existing data file in -walletdir (%s)&quot;,</span>
+<span id="L72"><span class="lineNum">      72</span>   [<span class="tlaGBC" title="Branch 0 was taken 4 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span><span class="tlaGBC" title="Branch 2 was taken 4 times"> + </span><span class="tlaUNC" title="Branch 3 was not taken"> - </span>]:<span class="tlaGNC">          20 :               name, fs::quoted(fs::PathToString(GetWalletDir()))))};</span></span>
+<span id="L73"><span class="lineNum">      73</span>                 :             :     }</span>
+<span id="L74"><span class="lineNum">      74</span>         [<span class="tlaGBC" title="Branch 0 was taken 1656 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span>]:<span class="tlaGNC">        3312 :     return wallet_path;</span></span>
+<span id="L75"><span class="lineNum">      75</span>                 :<span class="tlaGNC">        3344 : }</span></span>
+<span id="L76"><span class="lineNum">      76</span>                 :             : </span>
+<span id="L77"><span class="lineNum">      77</span>                 :<span class="tlaGNC">         193 : bool AddWalletSetting(interfaces::Chain&amp; chain, const std::string&amp; wallet_name)</span></span>
+<span id="L78"><span class="lineNum">      78</span>                 :             : {</span>
+<span id="L79"><span class="lineNum">      79</span>                 :<span class="tlaGNC">         386 :     const auto update_function = [&amp;wallet_name](common::SettingsValue&amp; setting_value) {</span></span>
+<span id="L80"><span class="lineNum">      80</span>         [<span class="tlaGBC" title="Branch 0 was taken 154 times"> + </span><span class="tlaGBC" title="Branch 1 was taken 39 times"> + </span>]:<span class="tlaGNC">         193 :         if (!setting_value.isArray()) setting_value.setArray();</span></span>
+<span id="L81"><span class="lineNum">      81</span>         [<span class="tlaGBC" title="Branch 0 was taken 169 times"> + </span><span class="tlaGBC" title="Branch 1 was taken 192 times"> + </span>]:<span class="tlaGNC">         361 :         for (const auto&amp; value : setting_value.getValues()) {</span></span>
+<span id="L82"><span class="lineNum">      82</span>   [<span class="tlaGBC" title="Branch 0 was taken 169 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span><span class="tlaGBC" title="Branch 2 was taken 168 times"> + </span><span class="tlaGBC" title="Branch 3 was taken 1 time"> + </span>]:<span class="tlaGNC">         169 :             if (value.isStr() &amp;&amp; value.get_str() == wallet_name) return interfaces::SettingsAction::SKIP_WRITE;</span></span>
+<span id="L83"><span class="lineNum">      83</span>                 :             :         }</span>
+<span id="L84"><span class="lineNum">      84</span>         [<span class="tlaGBC" title="Branch 0 was taken 192 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span>]:<span class="tlaGNC">         192 :         setting_value.push_back(wallet_name);</span></span>
+<span id="L85"><span class="lineNum">      85</span>                 :<span class="tlaGNC">         192 :         return interfaces::SettingsAction::WRITE;</span></span>
+<span id="L86"><span class="lineNum">      86</span>                 :<span class="tlaGNC">         193 :     };</span></span>
+<span id="L87"><span class="lineNum">      87</span>   [<span class="tlaGBC" title="Branch 0 was taken 193 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span><span class="tlaGBC" title="Branch 2 was taken 193 times"> + </span><span class="tlaUNC" title="Branch 3 was not taken"> - </span>]:<span class="tlaGNC">         193 :     return chain.updateRwSetting(&quot;wallet&quot;, update_function);</span></span>
+<span id="L88"><span class="lineNum">      88</span>                 :             : }</span>
+<span id="L89"><span class="lineNum">      89</span>                 :             : </span>
+<span id="L90"><span class="lineNum">      90</span>                 :<span class="tlaGNC">          23 : bool RemoveWalletSetting(interfaces::Chain&amp; chain, const std::string&amp; wallet_name)</span></span>
+<span id="L91"><span class="lineNum">      91</span>                 :             : {</span>
+<span id="L92"><span class="lineNum">      92</span>                 :<span class="tlaGNC">          46 :     const auto update_function = [&amp;wallet_name](common::SettingsValue&amp; setting_value) {</span></span>
+<span id="L93"><span class="lineNum">      93</span>         [<span class="tlaGBC" title="Branch 0 was taken 3 times"> + </span><span class="tlaGBC" title="Branch 1 was taken 20 times"> + </span>]:<span class="tlaGNC">          23 :         if (!setting_value.isArray()) {</span></span>
+<span id="L94"><span class="lineNum">      94</span>   [<span class="tlaGBC" title="Branch 0 was taken 1 time"> + </span><span class="tlaGBC" title="Branch 1 was taken 2 times"> + </span><span class="tlaGBC" title="Branch 2 was taken 1 time"> + </span><span class="tlaUNC" title="Branch 3 was not taken"> - </span>]:<span class="tlaGNC">           3 :             if (wallet_name.empty() &amp;&amp; setting_value.isNull()) {</span></span>
+<span id="L95"><span class="lineNum">      95</span>                 :             :                 // Empty setting suppresses backwards-compatible default wallet autoload.</span>
+<span id="L96"><span class="lineNum">      96</span>                 :<span class="tlaGNC">           1 :                 setting_value.setArray();</span></span>
+<span id="L97"><span class="lineNum">      97</span>                 :<span class="tlaGNC">           1 :                 return interfaces::SettingsAction::WRITE;</span></span>
+<span id="L98"><span class="lineNum">      98</span>                 :             :             }</span>
+<span id="L99"><span class="lineNum">      99</span>                 :             :             return interfaces::SettingsAction::SKIP_WRITE;</span>
+<span id="L100"><span class="lineNum">     100</span>                 :             :         }</span>
+<span id="L101"><span class="lineNum">     101</span>                 :<span class="tlaGNC">          20 :         common::SettingsValue new_value(common::SettingsValue::VARR);</span></span>
+<span id="L102"><span class="lineNum">     102</span>   [<span class="tlaGBC" title="Branch 0 was taken 20 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span><span class="tlaGBC" title="Branch 2 was taken 63 times"> + </span><span class="tlaGBC" title="Branch 3 was taken 20 times"> + </span>]:<span class="tlaGNC">          83 :         for (const auto&amp; value : setting_value.getValues()) {</span></span>
+<span id="L103"><span class="lineNum">     103</span>   [<span class="tlaGBC" title="Branch 0 was taken 63 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span><span class="tlaGBC" title="Branch 2 was taken 63 times"> + </span><span class="tlaUNC" title="Branch 3 was not taken"> - </span> :<span class="tlaGNC">          63 :             if (!value.isStr() || value.get_str() != wallet_name) new_value.push_back(value);</span></span>
+<span class="lineNum">        </span> <span class="tlaGBC" title="Branch 4 was taken 51 times"> + </span><span class="tlaGBC" title="Branch 5 was taken 12 times"> + </span><span class="tlaGBC" title="Branch 6 was taken 51 times"> + </span><span class="tlaUNC" title="Branch 7 was not taken"> - </span><span class="tlaGBC" title="Branch 8 was taken 51 times"> + </span> 
+<span class="lineNum">        </span>             <span class="tlaUNC" title="Branch 9 was not taken"> - </span>]
+<span id="L104"><span class="lineNum">     104</span>                 :             :         }</span>
+<span id="L105"><span class="lineNum">     105</span>   [<span class="tlaUNC" title="Branch 0 was not taken"> - </span><span class="tlaGBC" title="Branch 1 was taken 20 times"> + </span><span class="tlaUNC" title="Branch 2 was not taken"> - </span><span class="tlaGBC" title="Branch 3 was taken 20 times"> + </span> :<span class="tlaGNC">          20 :         if (new_value.size() == setting_value.size()) return interfaces::SettingsAction::SKIP_WRITE;</span></span>
+<span class="lineNum">        </span>          <span class="tlaGBC" title="Branch 4 was taken 12 times"> + </span><span class="tlaGBC" title="Branch 5 was taken 8 times"> + </span>]
+<span id="L106"><span class="lineNum">     106</span>                 :<span class="tlaGNC">          12 :         setting_value = std::move(new_value);</span></span>
+<span id="L107"><span class="lineNum">     107</span>                 :<span class="tlaGNC">          12 :         return interfaces::SettingsAction::WRITE;</span></span>
+<span id="L108"><span class="lineNum">     108</span>                 :<span class="tlaGNC">          20 :     };</span></span>
+<span id="L109"><span class="lineNum">     109</span>   [<span class="tlaGBC" title="Branch 0 was taken 23 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span><span class="tlaGBC" title="Branch 2 was taken 23 times"> + </span><span class="tlaUNC" title="Branch 3 was not taken"> - </span>]:<span class="tlaGNC">          23 :     return chain.updateRwSetting(&quot;wallet&quot;, update_function);</span></span>
+<span id="L110"><span class="lineNum">     110</span>                 :             : }</span>
+<span id="L111"><span class="lineNum">     111</span>                 :             : </span>
+<span id="L112"><span class="lineNum">     112</span>                 :<span class="tlaGNC">        1959 : void UpdateWalletSetting(interfaces::Chain&amp; chain,</span></span>
+<span id="L113"><span class="lineNum">     113</span>                 :             :                                 const std::string&amp; wallet_name,</span>
+<span id="L114"><span class="lineNum">     114</span>                 :             :                                 std::optional&lt;bool&gt; load_on_startup,</span>
+<span id="L115"><span class="lineNum">     115</span>                 :             :                                 std::vector&lt;bilingual_str&gt;&amp; warnings)</span>
+<span id="L116"><span class="lineNum">     116</span>                 :             : {</span>
+<span id="L117"><span class="lineNum">     117</span>         [<span class="tlaGBC" title="Branch 0 was taken 206 times"> + </span><span class="tlaGBC" title="Branch 1 was taken 1753 times"> + </span>]:<span class="tlaGNC">        1959 :     if (!load_on_startup) return;</span></span>
+<span id="L118"><span class="lineNum">     118</span>   [<span class="tlaGBC" title="Branch 0 was taken 188 times"> + </span><span class="tlaGBC" title="Branch 1 was taken 18 times"> + </span><span class="tlaGBC" title="Branch 2 was taken 2 times"> + </span><span class="tlaGBC" title="Branch 3 was taken 186 times"> + </span>]:<span class="tlaGNC">         206 :     if (load_on_startup.value() &amp;&amp; !AddWalletSetting(chain, wallet_name)) {</span></span>
+<span id="L119"><span class="lineNum">     119</span>   [<span class="tlaGBC" title="Branch 0 was taken 2 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span><span class="tlaGBC" title="Branch 2 was taken 2 times"> + </span><span class="tlaUNC" title="Branch 3 was not taken"> - </span>]:<span class="tlaGNC">           4 :         warnings.emplace_back(Untranslated(&quot;Wallet load on startup setting could not be updated, so wallet may not be loaded next node startup.&quot;));</span></span>
+<span id="L120"><span class="lineNum">     120</span>   [<span class="tlaGBC" title="Branch 0 was taken 18 times"> + </span><span class="tlaGBC" title="Branch 1 was taken 186 times"> + </span><span class="tlaGBC" title="Branch 2 was taken 1 time"> + </span><span class="tlaGBC" title="Branch 3 was taken 17 times"> + </span>]:<span class="tlaGNC">         204 :     } else if (!load_on_startup.value() &amp;&amp; !RemoveWalletSetting(chain, wallet_name)) {</span></span>
+<span id="L121"><span class="lineNum">     121</span>   [<span class="tlaGBC" title="Branch 0 was taken 1 time"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span><span class="tlaGBC" title="Branch 2 was taken 1 time"> + </span><span class="tlaUNC" title="Branch 3 was not taken"> - </span>]:<span class="tlaGNC">           2 :         warnings.emplace_back(Untranslated(&quot;Wallet load on startup setting could not be updated, so wallet may still be loaded next node startup.&quot;));</span></span>
+<span id="L122"><span class="lineNum">     122</span>                 :             :     }</span>
+<span id="L123"><span class="lineNum">     123</span>                 :             : }</span>
+<span id="L124"><span class="lineNum">     124</span>                 :             : </span>
+<span id="L125"><span class="lineNum">     125</span>                 :<span class="tlaGNC">        4194 : WalletDescriptor GenerateWalletDescriptor(const CExtPubKey&amp; master_key, const OutputType&amp; addr_type, bool internal)</span></span>
+<span id="L126"><span class="lineNum">     126</span>                 :             : {</span>
+<span id="L127"><span class="lineNum">     127</span>                 :<span class="tlaGNC">        4194 :     int64_t creation_time = GetTime();</span></span>
+<span id="L128"><span class="lineNum">     128</span>                 :             : </span>
+<span id="L129"><span class="lineNum">     129</span>                 :<span class="tlaGNC">        4194 :     std::string xpub = EncodeExtPubKey(master_key);</span></span>
+<span id="L130"><span class="lineNum">     130</span>                 :             : </span>
+<span id="L131"><span class="lineNum">     131</span>                 :             :     // Build descriptor string</span>
+<span id="L132"><span class="lineNum">     132</span>         [<span class="tlaGBC" title="Branch 0 was taken 4194 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span>]:<span class="tlaGNC">        4194 :     std::string desc_prefix;</span></span>
+<span id="L133"><span class="lineNum">     133</span>         [<span class="tlaGBC" title="Branch 0 was taken 4194 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span>]:<span class="tlaGNC">        4194 :     std::string desc_suffix = &quot;/*)&quot;;</span></span>
+<span id="L134"><span class="lineNum">     134</span>   [<span class="tlaGBC" title="Branch 0 was taken 1046 times"> + </span><span class="tlaGBC" title="Branch 1 was taken 1042 times"> + </span><span class="tlaGBC" title="Branch 2 was taken 1046 times"> + </span><span class="tlaGBC" title="Branch 3 was taken 1060 times"> + </span> :<span class="tlaGNC">        4194 :     switch (addr_type) {</span></span>
+<span class="lineNum">        </span>          <span class="tlaUNC" title="Branch 4 was not taken"> - </span><span class="tlaUNC" title="Branch 5 was not taken"> - </span>]
+<span id="L135"><span class="lineNum">     135</span>                 :<span class="tlaGNC">        1046 :     case OutputType::LEGACY: {</span></span>
+<span id="L136"><span class="lineNum">     136</span>         [<span class="tlaGBC" title="Branch 0 was taken 1046 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span>]:<span class="tlaGNC">        2092 :         desc_prefix = &quot;pkh(&quot; + xpub + &quot;/44h&quot;;</span></span>
+<span id="L137"><span class="lineNum">     137</span>                 :<span class="tlaGNC">        1046 :         break;</span></span>
+<span id="L138"><span class="lineNum">     138</span>                 :             :     }</span>
+<span id="L139"><span class="lineNum">     139</span>                 :<span class="tlaGNC">        1042 :     case OutputType::P2SH_SEGWIT: {</span></span>
+<span id="L140"><span class="lineNum">     140</span>         [<span class="tlaGBC" title="Branch 0 was taken 1042 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span>]:<span class="tlaGNC">        2084 :         desc_prefix = &quot;sh(wpkh(&quot; + xpub + &quot;/49h&quot;;</span></span>
+<span id="L141"><span class="lineNum">     141</span>         [<span class="tlaGBC" title="Branch 0 was taken 1042 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span>]:<span class="tlaGNC">        1042 :         desc_suffix += ')';</span></span>
+<span id="L142"><span class="lineNum">     142</span>                 :             :         break;</span>
+<span id="L143"><span class="lineNum">     143</span>                 :             :     }</span>
+<span id="L144"><span class="lineNum">     144</span>                 :<span class="tlaGNC">        1046 :     case OutputType::BECH32: {</span></span>
+<span id="L145"><span class="lineNum">     145</span>         [<span class="tlaGBC" title="Branch 0 was taken 1046 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span>]:<span class="tlaGNC">        2092 :         desc_prefix = &quot;wpkh(&quot; + xpub + &quot;/84h&quot;;</span></span>
+<span id="L146"><span class="lineNum">     146</span>                 :<span class="tlaGNC">        1046 :         break;</span></span>
+<span id="L147"><span class="lineNum">     147</span>                 :             :     }</span>
+<span id="L148"><span class="lineNum">     148</span>                 :<span class="tlaGNC">        1060 :     case OutputType::BECH32M: {</span></span>
+<span id="L149"><span class="lineNum">     149</span>         [<span class="tlaGBC" title="Branch 0 was taken 1060 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span>]:<span class="tlaGNC">        2120 :         desc_prefix = &quot;tr(&quot; + xpub + &quot;/86h&quot;;</span></span>
+<span id="L150"><span class="lineNum">     150</span>                 :<span class="tlaGNC">        1060 :         break;</span></span>
+<span id="L151"><span class="lineNum">     151</span>                 :             :     }</span>
+<span id="L152"><span class="lineNum">     152</span>                 :<span class="tlaUNC">           0 :     case OutputType::UNKNOWN: {</span></span>
+<span id="L153"><span class="lineNum">     153</span>                 :             :         // We should never have a DescriptorScriptPubKeyMan for an UNKNOWN OutputType,</span>
+<span id="L154"><span class="lineNum">     154</span>                 :             :         // so if we get to this point something is wrong</span>
+<span id="L155"><span class="lineNum">     155</span>                 :<span class="tlaUNC">           0 :         AssertUnreachable();</span></span>
+<span id="L156"><span class="lineNum">     156</span>                 :             :     }</span>
+<span id="L157"><span class="lineNum">     157</span>                 :             :     } // no default case, so the compiler can warn about missing cases</span>
+<span id="L158"><span class="lineNum">     158</span>         [<span class="tlaUNC" title="Branch 0 was not taken"> - </span><span class="tlaGBC" title="Branch 1 was taken 4194 times"> + </span>]:<span class="tlaGNC">        4194 :     assert(!desc_prefix.empty());</span></span>
+<span id="L159"><span class="lineNum">     159</span>                 :             : </span>
+<span id="L160"><span class="lineNum">     160</span>                 :             :     // Mainnet derives at 0', testnet and regtest derive at 1'</span>
+<span id="L161"><span class="lineNum">     161</span>   [<span class="tlaGBC" title="Branch 0 was taken 4194 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span><span class="tlaGBC" title="Branch 2 was taken 3858 times"> + </span><span class="tlaGBC" title="Branch 3 was taken 336 times"> + </span>]:<span class="tlaGNC">        4194 :     if (Params().IsTestChain()) {</span></span>
+<span id="L162"><span class="lineNum">     162</span>         [<span class="tlaGBC" title="Branch 0 was taken 3858 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span>]:<span class="tlaGNC">        3858 :         desc_prefix += &quot;/1h&quot;;</span></span>
+<span id="L163"><span class="lineNum">     163</span>                 :             :     } else {</span>
+<span id="L164"><span class="lineNum">     164</span>         [<span class="tlaGBC" title="Branch 0 was taken 336 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span>]:<span class="tlaGNC">         336 :         desc_prefix += &quot;/0h&quot;;</span></span>
+<span id="L165"><span class="lineNum">     165</span>                 :             :     }</span>
+<span id="L166"><span class="lineNum">     166</span>                 :             : </span>
+<span id="L167"><span class="lineNum">     167</span>   [<span class="tlaGBC" title="Branch 0 was taken 2097 times"> + </span><span class="tlaGBC" title="Branch 1 was taken 2097 times"> + </span><span class="tlaGBC" title="Branch 2 was taken 4194 times"> + </span><span class="tlaUNC" title="Branch 3 was not taken"> - </span>]:<span class="tlaGNC">       10485 :     std::string internal_path = internal ? &quot;/1&quot; : &quot;/0&quot;;</span></span>
+<span id="L168"><span class="lineNum">     168</span>   [<span class="tlaGBC" title="Branch 0 was taken 4194 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span><span class="tlaGBC" title="Branch 2 was taken 4194 times"> + </span><span class="tlaUNC" title="Branch 3 was not taken"> - </span> :<span class="tlaGNC">       12582 :     std::string desc_str = desc_prefix + &quot;/0h&quot; + internal_path + desc_suffix;</span></span>
+<span class="lineNum">        </span>          <span class="tlaGBC" title="Branch 4 was taken 4194 times"> + </span><span class="tlaUNC" title="Branch 5 was not taken"> - </span>]
+<span id="L169"><span class="lineNum">     169</span>                 :             : </span>
+<span id="L170"><span class="lineNum">     170</span>                 :             :     // Make the descriptor</span>
+<span id="L171"><span class="lineNum">     171</span>                 :<span class="tlaGNC">        8388 :     FlatSigningProvider keys;</span></span>
+<span id="L172"><span class="lineNum">     172</span>         [<span class="tlaUNC" title="Branch 0 was not taken"> - </span><span class="tlaGBC" title="Branch 1 was taken 4194 times"> + </span>]:<span class="tlaGNC">        8388 :     std::string error;</span></span>
+<span id="L173"><span class="lineNum">     173</span>   [<span class="tlaUNC" title="Branch 0 was not taken"> - </span><span class="tlaGBC" title="Branch 1 was taken 4194 times"> + </span><span class="tlaGBC" title="Branch 2 was taken 4194 times"> + </span><span class="tlaUNC" title="Branch 3 was not taken"> - </span>]:<span class="tlaGNC">        8388 :     std::vector&lt;std::unique_ptr&lt;Descriptor&gt;&gt; desc = Parse(desc_str, keys, error, false);</span></span>
+<span id="L174"><span class="lineNum">     174</span>   [<span class="tlaGBC" title="Branch 0 was taken 4194 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span><span class="tlaGBC" title="Branch 2 was taken 4194 times"> + </span><span class="tlaUNC" title="Branch 3 was not taken"> - </span> :<span class="tlaGNC">        4194 :     WalletDescriptor w_desc(std::move(desc.at(0)), creation_time, 0, 0, 0);</span></span>
+<span class="lineNum">        </span>          <span class="tlaGBC" title="Branch 4 was taken 4194 times"> + </span><span class="tlaUNC" title="Branch 5 was not taken"> - </span>]
+<span id="L175"><span class="lineNum">     175</span>                 :<span class="tlaGNC">        4194 :     return w_desc;</span></span>
+<span id="L176"><span class="lineNum">     176</span>                 :<span class="tlaGNC">        4194 : }</span></span>
+<span id="L177"><span class="lineNum">     177</span>                 :             : </span>
+<span id="L178"><span class="lineNum">     178</span>                 :<span class="tlaGNC">          28 : void WalletDescriptor::UpdateFrom(const WalletDescriptor&amp; other)</span></span>
+<span id="L179"><span class="lineNum">     179</span>                 :             : {</span>
+<span id="L180"><span class="lineNum">     180</span>         [<span class="tlaGBC" title="Branch 0 was taken 28 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span>]:<span class="tlaGNC">          28 :     if (!IsCanonicallyEquivalent(other)) {</span></span>
+<span id="L181"><span class="lineNum">     181</span>                 :             :         return;</span>
+<span id="L182"><span class="lineNum">     182</span>                 :             :     }</span>
+<span id="L183"><span class="lineNum">     183</span>                 :<span class="tlaGNC">          28 :     range_start = other.range_start;</span></span>
+<span id="L184"><span class="lineNum">     184</span>                 :<span class="tlaGNC">          28 :     next_index = other.next_index;</span></span>
+<span id="L185"><span class="lineNum">     185</span>                 :<span class="tlaGNC">          28 :     range_end = other.range_end;</span></span>
+<span id="L186"><span class="lineNum">     186</span>                 :<span class="tlaGNC">          28 :     creation_time = other.creation_time;</span></span>
+<span id="L187"><span class="lineNum">     187</span>                 :<span class="tlaGNC">          28 :     cache = other.cache;</span></span>
+<span id="L188"><span class="lineNum">     188</span>                 :             : }</span>
+<span id="L189"><span class="lineNum">     189</span>                 :             : </span>
+<span id="L190"><span class="lineNum">     190</span>                 :<span class="tlaGNC">        9550 : uint256 WalletDescriptor::GetCanonicalHash() const</span></span>
+<span id="L191"><span class="lineNum">     191</span>                 :             : {</span>
+<span id="L192"><span class="lineNum">     192</span>         [<span class="tlaGBC" title="Branch 0 was taken 3042 times"> + </span><span class="tlaGBC" title="Branch 1 was taken 6508 times"> + </span>]:<span class="tlaGNC">        9550 :     if (!m_canonical_hash) {</span></span>
+<span id="L193"><span class="lineNum">     193</span>                 :<span class="tlaGNC">        3042 :         m_canonical_hash.emplace();</span></span>
+<span id="L194"><span class="lineNum">     194</span>                 :<span class="tlaGNC">        3042 :         std::string canonical = descriptor-&gt;ToCanonicalString();</span></span>
+<span id="L195"><span class="lineNum">     195</span>   [<span class="tlaGBC" title="Branch 0 was taken 3042 times"> + </span><span class="tlaUNC" title="Branch 1 was not taken"> - </span><span class="tlaGBC" title="Branch 2 was taken 3042 times"> + </span><span class="tlaUNC" title="Branch 3 was not taken"> - </span> :<span class="tlaGNC">        6084 :         CSHA256().Write((unsigned char*)canonical.data(), canonical.size()).Finalize(m_canonical_hash-&gt;begin());</span></span>
+<span class="lineNum">        </span>          <span class="tlaGBC" title="Branch 4 was taken 3042 times"> + </span><span class="tlaUNC" title="Branch 5 was not taken"> - </span>]
+<span id="L196"><span class="lineNum">     196</span>                 :<span class="tlaGNC">        3042 :     }</span></span>
+<span id="L197"><span class="lineNum">     197</span>                 :<span class="tlaGNC">        9550 :     return *m_canonical_hash;</span></span>
+<span id="L198"><span class="lineNum">     198</span>                 :             : }</span>
+<span id="L199"><span class="lineNum">     199</span>                 :             : </span>
+<span id="L200"><span class="lineNum">     200</span>                 :<span class="tlaGNC">        4775 : bool WalletDescriptor::IsCanonicallyEquivalent(const WalletDescriptor&amp; other) const</span></span>
+<span id="L201"><span class="lineNum">     201</span>                 :             : {</span>
+<span id="L202"><span class="lineNum">     202</span>         [<span class="tlaGBC" title="Branch 0 was taken 4682 times"> + </span><span class="tlaGBC" title="Branch 1 was taken 93 times"> + </span>]:<span class="tlaGNC">        4775 :     return GetCanonicalHash() == other.GetCanonicalHash();</span></span>
+<span id="L203"><span class="lineNum">     203</span>                 :             : }</span>
+<span id="L204"><span class="lineNum">     204</span>                 :             : </span>
+<span id="L205"><span class="lineNum">     205</span>                 :             : } // namespace wallet</span>
+        </pre>
+              </td>
+            </tr>
+          </table>
+          <br>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+            <tr><td class="versionInfo">Generated by: <a href="https://github.com//linux-test-project/lcov" target="_parent">LCOV version 2.0-1</a></td></tr>
+          </table>
+          <br>
+
+</body>
+</html>
